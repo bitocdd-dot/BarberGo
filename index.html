@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BarberGo | Premium Experience</title>
     <style>
-        /* DESIGN PREMIUM EMBUTIDO */
-        :root {
-            --gold: #D4AF37;
-            --black: #0a0a0a;
-            --zinc: #1a1a1a;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         
         body {
             background-color: var(--black);
@@ -23,44 +18,29 @@
             min-height: 100vh;
             text-align: center;
             padding: 20px;
-            background-image: radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%);
+            /* Imagem de fundo luxuosa */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://images.unsplash.com');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         .card {
-            background: var(--zinc);
+            background: rgba(26, 26, 26, 0.95);
             padding: 40px 25px;
             border-radius: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             max-width: 350px;
             width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--gold);
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-        }
-
+        .logo { font-size: 28px; font-weight: 900; color: var(--gold); margin-bottom: 10px; }
         .logo span { color: white; }
 
-        h1 {
-            font-size: 32px;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p {
-            color: #888;
-            font-size: 15px;
-            margin-bottom: 35px;
-            line-height: 1.5;
-        }
+        h1 { font-size: 32px; margin-bottom: 15px; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p { color: #888; font-size: 15px; margin-bottom: 35px; line-height: 1.5; }
 
         .btn {
             background: var(--gold);
@@ -71,20 +51,13 @@
             font-weight: 800;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
             box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+            border: none;
+            width: 100%;
+            cursor: pointer;
         }
 
-        .btn:active { transform: scale(0.96); }
-
-        .footer-link {
-            margin-top: 25px;
-            color: #555;
-            font-size: 13px;
-            text-decoration: none;
-            display: block;
-        }
+        .footer-link { margin-top: 25px; color: #555; font-size: 13px; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
@@ -94,10 +67,13 @@
         <h1>Sua barbearia, onde você estiver.</h1>
         <p>O serviço premium que você merece, agora na palma da sua mão.</p>
         
-        <a href="mapa.html" class="btn">Chamar Barbeiro</a>
+        <button class="btn" onclick="fazerLogin()">Chamar Barbeiro</button>
         
         <a href="login-barbeiro.html" class="footer-link">Sou um profissional →</a>
     </div>
+
+    <!-- LIGAÇÃO COM O CÉREBRO DO SITE -->
+    <script type="module" src="main.js"></script>
 
 </body>
 </html>
