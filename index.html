@@ -58,7 +58,15 @@
             font-family: inherit;
         }
 
-        .footer-link { margin-top: 25px; color: #555; font-size: 13px; text-decoration: none; display: block; }
+        .footer-link { 
+            margin-top: 25px; 
+            color: #555; 
+            font-size: 13px; 
+            text-decoration: none; 
+            display: block; 
+            transition: 0.3s;
+        }
+        .footer-link:hover { color: var(--gold); }
     </style>
 </head>
 <body>
@@ -68,10 +76,11 @@
         <h1>Sua barbearia, onde você estiver.</h1>
         <p>O serviço premium que você merece, agora na palma da sua mão.</p>
         
-        <!-- BOTÃO AGORA REDIRECIONA PARA O CATÁLOGO DE SERVIÇOS -->
+        <!-- BOTÃO PARA O CLIENTE -->
         <button class="btn" onclick="window.location.href='servicos.html'">Chamar Barbeiro</button>
         
-        <a href="login-barbeiro.html" class="footer-link">Sou um profissional →</a>
+        <!-- LINK CORRIGIDO PARA O PAINEL DO PROFISSIONAL -->
+        <a href="painel-barbeiro.html" class="footer-link">Sou um profissional →</a>
     </div>
 
     <!-- LIGAÇÃO COM O CÉREBRO DO SITE -->
