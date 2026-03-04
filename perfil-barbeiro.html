@@ -1,1 +1,127 @@
-class='avaliacao'><h3>Avalie este barbeiro:</h3><div id='estrelas'>★★★★★</div></div><script src='js/avaliacoes.js'></script>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarberGo | Perfil Profissional</title>
+    <style>
+        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body {
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
+                        url('https://images.unsplash.com');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header-profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .avatar {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            margin: 0 auto 15px;
+            background: #333 url('https://images.unsplash.com');
+            background-size: cover;
+        }
+
+        .rating { color: var(--gold); font-size: 14px; margin-top: 5px; }
+
+        .services-list {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 100px; /* Espaço para o botão fixo */
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .price { color: var(--gold); font-weight: bold; }
+
+        .footer-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(transparent, var(--black));
+        }
+
+        .btn-confirm {
+            background: var(--gold);
+            color: black;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 16px;
+            display: block;
+            text-align: center;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="mapa.html" class="back-link">← Voltar para o mapa</a>
+
+    <div class="header-profile">
+        <div class="avatar"></div>
+        <h2>Ricardo Silva</h2>
+        <p style="color: #ccc;">Barbeiro Master • 8 anos de exp.</p>
+        <div class="rating">★★★★★ (142 avaliações)</div>
+    </div>
+
+    <div class="services-list">
+        <h3 style="margin-bottom: 15px; font-size: 18px;">Serviços em Domicílio</h3>
+        <div class="service-item">
+            <span>Corte Social / Degradê</span>
+            <span class="price">R$ 50,00</span>
+        </div>
+        <div class="service-item">
+            <span>Barba Premium</span>
+            <span class="price">R$ 35,00</span>
+        </div>
+        <div class="service-item">
+            <span>Combo (Corte + Barba)</span>
+            <span class="price">R$ 75,00</span>
+        </div>
+        <div class="service-item">
+            <span>Pezinho e Sobrancelha</span>
+            <span class="price">R$ 20,00</span>
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <a href="#" class="btn-confirm" onclick="alert('Solicitação enviada ao barbeiro! Aguarde a confirmação.')">
+            Confirmar Agendamento
+        </a>
+    </div>
+
+</body>
+</html>
