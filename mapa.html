@@ -3,30 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo | Localização Real</title>
+    <title>BarberGo | Localização em Tempo Real</title>
+    
+    <!-- Leaflet CSS para o Mapa -->
     <link rel="stylesheet" href="https://unpkg.com" />
+    
     <style>
-        :root { --gold: #D4AF37; --black: #0a0a0a; }
+        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--black); height: 100vh; display: flex; flex-direction: column; }
-        #map { flex: 1; width: 100%; }
-        .info-floating { background: rgba(18, 18, 18, 0.95); padding: 20px; border-radius: 25px 25px 0 0; border-top: 3px solid var(--gold); text-align: center; color: white; }
-        .btn-chat { background: var(--gold); color: black; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 800; display: block; margin-top: 10px; }
+        
+        body {
+            background-color: var(--black);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Estilizado */
+        header {
+            padding: 20px;
+            background: var(--zinc);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 24px; font-weight: 900; color: var(--gold); }
+        .logo span { color: white; }
+
+        /* Container do Mapa */
+        #map {
+            flex-grow: 1;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Estilização do marcador do usuário (opcional via CSS) */
+        .user-marker {
+            background-color: var(--gold);
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .btn-voltar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: var(--gold);
+            color: black;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
+
+    <header>
+        <div class="logo">BARBER<span>GO</span></div>
+        <p style="font-size: 12px; color: #888;">Localizando barbeiros próximos...</p>
+    </header>
+
     <div id="map"></div>
-    <div class="info-floating">
-        <h3 style="color: var(--gold)">Barbeiro a caminho!</h3>
-        <p style="font-size: 14px; margin: 5px 0;">Ricardo Silva está chegando.</p>
-        <a href="chat.html" class="btn-chat">FALAR COM BARBEIRO</a>
-    </div>
+
+    <a href="index.html" class="btn-voltar">Voltar ao Início</a>
+
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com"></script>
+
     <script>
-        // VISÃO DE SATÉLITE REAL
-        var map = L.map('map').setView([-22.9035, -43.2096], 16);
-        L.tileLayer('https://server.arcgisonline.com{z}/{y}/{x}').addTo(map);
-        L.marker([-22.9035, -43.2096]).addTo(map).bindPopup('<b>Ricardo Silva</b>').openPopup();
+        // Inicializa o mapa focado no Brasil por padrão
+        const map = L.map('map').setView([-23.5505, -46.6333], 13);
+
+        // Adiciona o layout do mapa (Estilo Dark para combinar com o BarberGo)
+        L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        let marker, circle;
+
+        // Função para atualizar posição
+        function updateLocation(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            // Remove marcador anterior se existir
+            if (marker) {
+                map.removeLayer(marker);
+                map.removeLayer(circle);
+            }
+
+            // Adiciona novo marcador (Sua Foto/Ícone)
+            marker = L.marker([lat, lng]).addTo(map)
+                .bindPopup("Você está aqui").openPopup();
+
+            // Adiciona círculo de precisão
+            circle = L.circle([lat, lng], { radius: accuracy, color: '#D4AF37', fillOpacity: 0.1 }).addTo(map);
+
+            // Centraliza o mapa na posição do usuário
+            map.setView([lat, lng], 16);
+        }
+
+        function handleError(error) {
+            console.error("Erro ao obter localização: ", error);
+            alert("Por favor, ative o GPS para usar o mapa.");
+        }
+
+        // Monitoramento em tempo real
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(updateLocation, handleError, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
+        } else {
+            alert("Seu navegador não suporta geolocalização.");
+        }
     </script>
 </body>
 </html>
