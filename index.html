@@ -1,25 +1,113 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo - Seu Barbeiro em um toque</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
-        <header>
-            <img src="logo.png" alt="BarberGo Logo" class="logo">
-            <nav>
-                <a href="login-cliente.html">Sou Cliente</a>
-                <a href="login-barbeiro.html">Sou Barbeiro</a>
-            </nav>
-        </header>
-        <main>
-            <h1>O barbeiro vai até você.</h1>
-            <button onclick="location.href='mapa.html'">Encontrar agora</button>
-        </main>
-    </div>
-</body>
-</html>
+@import url('https://fonts.googleapis.com');
 
+:root {
+  --gold: #D4AF37;
+  --gold-dark: #aa8a2e;
+  --black-pure: #000000;
+  --black-card: #121212;
+  --gray-text: #a0a0a0;
+  --white: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--black-pure);
+  background-image: radial-gradient(circle at top right, #1a1a1a, #000000);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho Sofisticado */
+header {
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.logo-text {
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: -1px;
+  color: var(--gold);
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--gray-text);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 20px;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: var(--gold);
+}
+
+/* Área Principal */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(to bottom, #fff, #888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p {
+  color: var(--gray-text);
+  margin-bottom: 40px;
+  max-width: 300px;
+  font-size: 16px;
+}
+
+/* Botão Estilo App de Luxo */
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #000;
+  border: none;
+  width: 100%;
+  max-width: 280px;
+  padding: 20px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+  transition: transform 0.2s;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+/* Ajuste para o link do botão */
+button a {
+  text-decoration: none;
+  color: inherit;
+}
