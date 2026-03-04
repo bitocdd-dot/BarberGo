@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarberGo | Chat com Barbeiro</title>
+    <style>
+        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--black); color: white; height: 100vh; display: flex; flex-direction: column; }
+        
+        header { 
+            padding: 20px; background: var(--zinc); border-bottom: 1px solid var(--gold); 
+            display: flex; align-items: center; gap: 15px;
+        }
+        .avatar-small { width: 40px; height: 40px; border-radius: 50%; background: #333 url('https://images.unsplash.com') center/cover; }
+        
+        .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; }
+        .msg.received { background: #333; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg.sent { background: var(--gold); color: black; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
+        
+        .input-area { padding: 20px; background: var(--zinc); display: flex; gap: 10px; }
+        input { flex: 1; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: white; outline: none; }
+        .btn-send { background: var(--gold); border: none; padding: 0 20px; border-radius: 12px; font-weight: bold; color: black; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="avatar-small"></div>
+        <div>
+            <p style="font-weight: bold;">Ricardo Silva</p>
+            <p style="font-size: 11px; color: #28a745;">Online e a caminho</p>
+        </div>
+    </header>
+
+    <div class="chat-area" id="chat">
+        <div class="msg received">Olá! Já estou com meu material e a caminho da sua localização. 💈</div>
+        <div class="msg received">Pode me confirmar se o número da casa é o 450?</div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="mensagem" placeholder="Digite sua mensagem...">
+        <button class="btn-send" onclick="enviar()">Enviar</button>
+    </div>
+
+    <script>
+        function enviar() {
+            const input = document.getElementById('mensagem');
+            const chat = document.getElementById('chat');
+            if(input.value) {
+                const novaMsg = document.createElement('div');
+                novaMsg.className = 'msg sent';
+                novaMsg.textContent = input.value;
+                chat.appendChild(novaMsg);
+                input.value = '';
+                chat.scrollTop = chat.scrollHeight;
+                
+                // Simulação de resposta automática
+                setTimeout(() => {
+                    const resposta = document.createElement('div');
+                    resposta.className = 'msg received';
+                    resposta.textContent = "Combinado! Chego em 5 minutos.";
+                    chat.appendChild(resposta);
+                    chat.scrollTop = chat.scrollHeight;
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
