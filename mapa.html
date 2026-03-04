@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo | Localizar Barbeiro</title>
+    <title>BarberGo | Localização Real</title>
+    <link rel="stylesheet" href="https://unpkg.com" />
     <style>
-        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
+        :root { --gold: #D4AF37; --black: #0a0a0a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--black); color: white; height: 100vh; display: flex; flex-direction: column; }
-        #map-placeholder { flex: 1; background: #222 url('https://user-images.githubusercontent.com') center/cover; position: relative; }
-        .overlay-search { position: absolute; top: 20px; width: 90%; left: 5%; background: white; padding: 15px; border-radius: 12px; color: black; font-weight: bold; }
-        .barber-card { background: var(--zinc); padding: 20px; border-radius: 24px 24px 0 0; border-top: 2px solid var(--gold); text-align: center; }
-        .btns-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-profile { background: var(--gold); color: black; text-decoration: none; padding: 15px; border-radius: 12px; flex: 1; font-weight: 800; text-align: center; }
-        .btn-chat { background: #333; color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        body { background: var(--black); height: 100vh; display: flex; flex-direction: column; }
+        #map { flex: 1; width: 100%; }
+        .info-floating { background: rgba(18, 18, 18, 0.95); padding: 20px; border-radius: 25px 25px 0 0; border-top: 3px solid var(--gold); text-align: center; color: white; }
+        .btn-chat { background: var(--gold); color: black; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: 800; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div id="map-placeholder">
-        <div class="overlay-search">📍 Barbeiro a 1.2km de distância</div>
+    <div id="map"></div>
+    <div class="info-floating">
+        <h3 style="color: var(--gold)">Barbeiro a caminho!</h3>
+        <p style="font-size: 14px; margin: 5px 0;">Ricardo Silva está chegando.</p>
+        <a href="chat.html" class="btn-chat">FALAR COM BARBEIRO</a>
     </div>
-    <div class="barber-card">
-        <h3>Ricardo Silva</h3>
-        <p style="color: #888; font-size: 14px; margin-top: 5px;">★ 4.9 • Chega em 5 min</p>
-        <div class="btns-group">
-            <a href="chat.html" class="btn-chat">💬 Chat</a>
-            <a href="perfil-barbeiro.html" class="btn-profile">Ver Perfil</a>
-        </div>
-    </div>
+    <script src="https://unpkg.com"></script>
+    <script>
+        // VISÃO DE SATÉLITE REAL
+        var map = L.map('map').setView([-22.9035, -43.2096], 16);
+        L.tileLayer('https://server.arcgisonline.com{z}/{y}/{x}').addTo(map);
+        L.marker([-22.9035, -43.2096]).addTo(map).bindPopup('<b>Ricardo Silva</b>').openPopup();
+    </script>
 </body>
 </html>
