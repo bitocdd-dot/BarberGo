@@ -8,63 +8,30 @@
         :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--black); color: white; padding: 20px; }
-        
-        h2 { color: var(--gold); text-align: center; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
-        
+        h2 { color: var(--gold); text-align: center; margin-bottom: 25px; text-transform: uppercase; }
         .grid-cortes { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        
-        .corte-card { 
-            background: var(--zinc); border-radius: 15px; overflow: hidden; 
-            border: 1px solid rgba(212,175,55,0.2); text-align: center; padding-bottom: 10px;
-        }
-        
+        .corte-card { background: var(--zinc); border-radius: 15px; overflow: hidden; border: 1px solid rgba(212,175,55,0.2); text-align: center; padding-bottom: 10px; }
         .corte-img { width: 100%; height: 120px; background-size: cover; background-position: center; }
-        
         .corte-nome { font-size: 14px; font-weight: bold; margin: 10px 0 5px; }
         .corte-preco { color: var(--gold); font-weight: 900; font-size: 16px; }
-
-        .btn-confirmar {
-            background: var(--gold); color: black; text-decoration: none;
-            padding: 18px; border-radius: 14px; font-weight: 800; display: block;
-            text-align: center; text-transform: uppercase; margin-top: 20px;
-        }
+        .btn-confirmar { background: var(--gold); color: black; text-decoration: none; padding: 18px; border-radius: 14px; font-weight: 800; display: block; text-align: center; }
     </style>
 </head>
 <body>
-
     <h2>Catálogo Premium</h2>
-
     <div class="grid-cortes">
-        <!-- Corte 1 -->
-        <div class="corte-card" onclick="alert('Degradê selecionado!')">
+        <div class="corte-card" onclick="alert('Selecionado!')">
             <div class="corte-img" style="background-image: url('https://images.unsplash.com')"></div>
             <p class="corte-nome">Degradê Navalhado</p>
             <p class="corte-preco">R$ 55,00</p>
         </div>
-
-        <!-- Corte 2 -->
-        <div class="corte-card" onclick="alert('Barba selecionada!')">
+        <div class="corte-card" onclick="alert('Selecionado!')">
             <div class="corte-img" style="background-image: url('https://images.unsplash.com')"></div>
             <p class="corte-nome">Barba Premium</p>
             <p class="corte-preco">R$ 35,00</p>
         </div>
-
-        <!-- Corte 3 -->
-        <div class="corte-card" onclick="alert('Social selecionado!')">
-            <div class="corte-img" style="background-image: url('https://images.unsplash.com')"></div>
-            <p class="corte-nome">Corte Social</p>
-            <p class="corte-preco">R$ 45,00</p>
-        </div>
-
-        <!-- Corte 4 -->
-        <div class="corte-card" onclick="alert('Combo selecionado!')">
-            <div class="corte-img" style="background-image: url('https://images.unsplash.com')"></div>
-            <p class="corte-nome">Combo (Corte+Barba)</p>
-            <p class="corte-preco">R$ 80,00</p>
-        </div>
     </div>
-
-    <a href="mapa.html" class="btn-confirmar">Prosseguir para o Mapa</a>
-
+    <!-- BOTÃO AGORA VAI PARA O PAGAMENTO -->
+    <a href="pagamento.html" class="btn-confirmar">Ir para o Pagamento</a>
 </body>
 </html>
