@@ -1,1 +1,24 @@
-body.dark{background:#000;font-family:'Poppins',sans-serif;color:#fff}.container{width:85%;margin:80px auto;text-align:center}input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:none}button{width:100%;padding:14px;background:linear-gradient(45deg,#be8f32,#f0d48a);border:none;border-radius:10px;font-size:18px;color:#000;font-weight:bold;cursor:pointer}#map{width:100vw;height:100vh}
+:root {
+    --gold: #D4AF37;
+    --black: #121212;
+    --gray: #2c2c2c;
+}
+
+body {
+    background-color: var(--black);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    background-color: var(--gold);
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
