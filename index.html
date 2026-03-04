@@ -55,6 +55,7 @@
             border: none;
             width: 100%;
             cursor: pointer;
+            font-family: inherit;
         }
 
         .footer-link { margin-top: 25px; color: #555; font-size: 13px; text-decoration: none; display: block; }
@@ -67,7 +68,8 @@
         <h1>Sua barbearia, onde você estiver.</h1>
         <p>O serviço premium que você merece, agora na palma da sua mão.</p>
         
-        <button class="btn" onclick="fazerLogin()">Chamar Barbeiro</button>
+        <!-- BOTÃO AGORA REDIRECIONA PARA O CATÁLOGO DE SERVIÇOS -->
+        <button class="btn" onclick="window.location.href='servicos.html'">Chamar Barbeiro</button>
         
         <a href="login-barbeiro.html" class="footer-link">Sou um profissional →</a>
     </div>
