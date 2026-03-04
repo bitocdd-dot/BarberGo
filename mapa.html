@@ -7,69 +7,26 @@
     <style>
         :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        
-        body {
-            background-color: var(--black);
-            color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Simulação do Mapa */
-        #map-placeholder {
-            flex: 1;
-            background: #222 url('https://user-images.githubusercontent.com');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .overlay-search {
-            position: absolute;
-            top: 20px;
-            width: 90%;
-            left: 5%;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            color: black;
-            font-weight: bold;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .barber-card {
-            background: var(--zinc);
-            padding: 20px;
-            border-radius: 24px 24px 0 0;
-            border-top: 2px solid var(--gold);
-            text-align: center;
-        }
-
-        .btn-profile {
-            background: var(--gold);
-            color: black;
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 12px;
-            display: block;
-            margin-top: 15px;
-            font-weight: 800;
-        }
+        body { background-color: var(--black); color: white; height: 100vh; display: flex; flex-direction: column; }
+        #map-placeholder { flex: 1; background: #222 url('https://user-images.githubusercontent.com') center/cover; position: relative; }
+        .overlay-search { position: absolute; top: 20px; width: 90%; left: 5%; background: white; padding: 15px; border-radius: 12px; color: black; font-weight: bold; }
+        .barber-card { background: var(--zinc); padding: 20px; border-radius: 24px 24px 0 0; border-top: 2px solid var(--gold); text-align: center; }
+        .btns-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-profile { background: var(--gold); color: black; text-decoration: none; padding: 15px; border-radius: 12px; flex: 1; font-weight: 800; text-align: center; }
+        .btn-chat { background: #333; color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-
     <div id="map-placeholder">
-        <div class="overlay-search">📍 Onde você está agora?</div>
+        <div class="overlay-search">📍 Barbeiro a 1.2km de distância</div>
     </div>
-
     <div class="barber-card">
-        <h3>Barbeiro Próximo: Ricardo Silva</h3>
-        <p style="color: #888; font-size: 14px; margin-top: 5px;">★ 4.9 • 1.2km de distância</p>
-        <a href="perfil-barbeiro.html" class="btn-profile">Ver Perfil e Preços</a>
+        <h3>Ricardo Silva</h3>
+        <p style="color: #888; font-size: 14px; margin-top: 5px;">★ 4.9 • Chega em 5 min</p>
+        <div class="btns-group">
+            <a href="chat.html" class="btn-chat">💬 Chat</a>
+            <a href="perfil-barbeiro.html" class="btn-profile">Ver Perfil</a>
+        </div>
     </div>
-
 </body>
 </html>
-
