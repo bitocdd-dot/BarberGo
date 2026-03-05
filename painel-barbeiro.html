@@ -3,94 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo | Painel Profissional</title>
+    <title>Painel do Barbeiro - BarberGo</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; --green: #28a745; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--black); color: white; padding: 20px; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .status-badge { background: var(--green); color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--zinc); padding: 15px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1); text-align: center; }
-        .stat-card span { display: block; font-size: 20px; font-weight: 900; color: var(--gold); }
-        .stat-card p { font-size: 12px; color: #888; margin-top: 5px; }
-
-        h3 { margin-bottom: 15px; color: var(--gold); text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
-
-        .pedido-card {
-            background: var(--zinc); padding: 20px; border-radius: 20px;
-            border-left: 4px solid var(--gold); margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
-
-        .pedido-info { margin-bottom: 15px; }
-        .pedido-info p { font-size: 14px; margin-bottom: 5px; }
-        
-        .btn-aceitar {
-            background: var(--gold); color: black; border: none; width: 100%;
-            padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .btn-online {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: #222; padding: 10px 20px; border-radius: 30px; border: 1px solid #444;
-            font-size: 13px; color: #aaa;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; }
+        .btn-finalizar { background-color: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-finalizar:hover { background-color: #218838; transform: scale(1.02); }
+        .status-badge { background: #ffc107; color: black; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div>
-            <h1 style="font-size: 20px;">Olá, Ricardo</h1>
-            <p style="color:#555; font-size: 12px;">Barbearia Premium</p>
+    <div class="card">
+        <h2>Próximo Cliente</h2>
+        <div style="margin: 20px 0;">
+            <p><strong>Nome:</strong> João Silva</p>
+            <p><strong>Serviço:</strong> Corte Degradê</p>
+            <span class="status-badge">Aguardando Início</span>
         </div>
-        <div class="status-badge">ONLINE</div>
-    </header>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <span>R$ 450</span>
-            <p>Hoje</p>
-        </div>
-        <div class="stat-card">
-            <span>12</span>
-            <p>Cortes</p>
-        </div>
+        
+        <!-- BOTÃO QUE CHAMA O MAPA -->
+        <button class="btn-finalizar" onclick="iniciarTrajeto()">
+            FINALIZAR E IR AO MAPA
+        </button>
     </div>
-
-    <h3>Chamados Disponíveis</h3>
-
-    <div class="pedido-card" id="pedido1">
-        <div class="pedido-info">
-            <p><strong>Cliente:</strong> Fabrício M.</p>
-            <p><strong>Serviço:</strong> Degradê Navalhado</p>
-            <p><strong>Distância:</strong> 1.2 km (Aprox. 5 min)</p>
-            <p style="color: var(--gold);"><strong>Valor: R$ 55,00</strong></p>
-        </div>
-        <button class="btn-aceitar" onclick="aceitarServico()">Aceitar Serviço</button>
-    </div>
-
-    <div class="btn-online">Disponível para novos chamados</div>
 
     <script>
-        function aceitarServico() {
-            if(confirm('Deseja iniciar este atendimento agora?')) {
-                document.getElementById('pedido1').style.borderColor = '#28a745';
-                document.getElementById('pedido1').innerHTML = `
-                    <h3 style="color:#28a745">✓ ATENDIMENTO EM CURSO</h3>
-                    <p style="margin:10px 0; font-size:14px;">Inicie o trajeto para a casa do cliente.</p>
-                    <button class="btn-aceitar" style="background:#555; color:white" onclick="location.reload()">Finalizar Corte</button>
-                `;
-            }
+        function iniciarTrajeto() {
+            // Salva um aviso visual e redireciona
+            window.location.href = "mapa.html";
         }
     </script>
 </body>
