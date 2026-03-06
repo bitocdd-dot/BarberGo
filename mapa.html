@@ -4,14 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Mapa BarberGo</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -20,7 +20,6 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 body{
 margin:0;
 padding:0;
-font-family:Arial;
 }
 
 #map{
@@ -28,9 +27,7 @@ height:100vh;
 width:100%;
 }
 
-/* caixa topo */
-
-.info-box{
+.top-bar{
 position:absolute;
 top:20px;
 left:50%;
@@ -44,48 +41,23 @@ z-index:1000;
 box-shadow:0 0 10px rgba(0,0,0,0.5);
 }
 
-/* contador clientes */
-
-.clientes-box{
-position:absolute;
-top:70px;
-left:50%;
-transform:translateX(-50%);
-background:gold;
-color:black;
-padding:10px 20px;
-border-radius:10px;
-font-weight:bold;
-z-index:1000;
-}
-
-/* menu lateral */
-
 .menu{
 position:absolute;
 top:20px;
 right:20px;
+background:#111;
+padding:10px;
+border-radius:10px;
 z-index:1000;
-display:flex;
-flex-direction:column;
-gap:10px;
 }
 
 .menu button{
-
-background:#111;
-color:white;
+background:gold;
 border:none;
-padding:10px 14px;
+padding:8px 10px;
 border-radius:8px;
 cursor:pointer;
 font-weight:bold;
-
-}
-
-.menu button:hover{
-background:gold;
-color:black;
 }
 
 </style>
@@ -94,27 +66,35 @@ color:black;
 
 <body>
 
-<div class="info-box">
-Barbeiro a caminho do cliente
-</div>
-
-<div class="clientes-box">
-🔥 8 clientes procurando barbeiro agora
+<div class="top-bar">
+Barbeiros online perto de você
 </div>
 
 <div class="menu">
-
-<button onclick="abrirPerfil()">Meu Perfil</button>
-
-<button onclick="verBarbeiros()">Barbeiros</button>
-
-<button onclick="suporte()">Suporte</button>
-
+<button onclick="perfilCliente()">Perfil</button>
 </div>
 
 <div id="map"></div>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+authDomain: "barbergo-2f72c.firebaseapp.com",
+projectId: "barbergo-2f72c",
+storageBucket: "barbergo-2f72c.firebasestorage.app",
+messagingSenderId: "862773297159",
+appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
+};
+
+const app = initializeApp(firebaseConfig)
+const db = getDatabase(app)
+
+
 
 const map = L.map('map').setView([-22.9068,-43.1729],13)
 
@@ -124,20 +104,7 @@ maxZoom:19
 
 
 
-let barbeiroMarker
 let clienteMarker
-let rotaLinha
-
-
-
-let clienteLat = -22.9068
-let clienteLng = -43.1729
-
-
-
-clienteMarker = L.marker([clienteLat,clienteLng])
-.addTo(map)
-.bindPopup("Cliente BarberGo")
 
 
 
@@ -146,66 +113,74 @@ navigator.geolocation.watchPosition(function(position){
 const lat = position.coords.latitude
 const lng = position.coords.longitude
 
+if(clienteMarker){
 
-
-if(barbeiroMarker){
-
-barbeiroMarker.setLatLng([lat,lng])
+clienteMarker.setLatLng([lat,lng])
 
 }else{
 
-barbeiroMarker = L.marker([lat,lng])
+clienteMarker = L.marker([lat,lng])
 .addTo(map)
-.bindPopup("Barbeiro")
+.bindPopup("Você")
 
 map.setView([lat,lng],15)
 
 }
 
-
-
-if(rotaLinha){
-
-map.removeLayer(rotaLinha)
-
-}
+})
 
 
 
-rotaLinha = L.polyline([
-[lat,lng],
-[clienteLat,clienteLng]
-],
-{color:'gold',weight:4}
-).addTo(map)
+/* BARBEIROS ONLINE */
 
+const barbeirosRef = ref(db,'barbeirosOnline')
 
+onValue(barbeirosRef,(snapshot)=>{
+
+const data = snapshot.val()
+
+if(!data) return
+
+Object.keys(data).forEach((id)=>{
+
+const barbeiro = data[id]
+
+const marker = L.marker([barbeiro.lat,barbeiro.lng])
+.addTo(map)
+.bindPopup(
+`
+<b>${barbeiro.nome}</b><br>
+⭐ ${barbeiro.avaliacao}<br><br>
+<button onclick="abrirPerfil('${barbeiro.nome}')">
+Ver perfil
+</button>
+`
+)
+
+})
 
 })
 
 
 
-/* BOTÕES */
+window.abrirPerfil = function(nome){
 
-function abrirPerfil(){
+localStorage.setItem("barbeiroSelecionado",nome)
 
-window.location.href="perfil-cliente.html"
-
-}
-
-function verBarbeiros(){
-
-window.location.href="barbeiros-disponiveis.html"
+window.location.href="perfil-barbeiro.html"
 
 }
 
-function suporte(){
 
-alert("Suporte BarberGo em breve")
+
+window.perfilCliente = function(){
+
+alert("Perfil do cliente em breve")
 
 }
 
 </script>
 
 </body>
+
 </html>
