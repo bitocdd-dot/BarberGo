@@ -1,130 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo | Localização em Tempo Real</title>
-    
-    <!-- Leaflet CSS para o Mapa -->
-    <link rel="stylesheet" href="https://unpkg.com" />
-    
-    <style>
-        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        
-        body {
-            background-color: var(--black);
-            color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<meta charset="UTF-8">
+<title>Mapa BarberGo</title>
 
-        /* Header Estilizado */
-        header {
-            padding: 20px;
-            background: var(--zinc);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            text-align: center;
-            z-index: 1000;
-        }
+<link rel="stylesheet" href="style.css">
 
-        .logo { font-size: 24px; font-weight: 900; color: var(--gold); }
-        .logo span { color: white; }
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-        /* Container do Mapa */
-        #map {
-            flex-grow: 1;
-            width: 100%;
-            z-index: 1;
-        }
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        /* Estilização do marcador do usuário (opcional via CSS) */
-        .user-marker {
-            background-color: var(--gold);
-            border: 2px solid white;
-            border-radius: 50%;
-        }
+<style>
 
-        .btn-voltar {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: var(--gold);
-            color: black;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-    </style>
+#map{
+height:100vh;
+width:100%;
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <header>
-        <div class="logo">BARBER<span>GO</span></div>
-        <p style="font-size: 12px; color: #888;">Localizando barbeiros próximos...</p>
-    </header>
+<div id="map"></div>
 
-    <div id="map"></div>
+<script>
 
-    <a href="index.html" class="btn-voltar">Voltar ao Início</a>
+const map = L.map('map').setView([-22.9068, -43.1729], 13);
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com"></script>
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+maxZoom: 19,
+}).addTo(map);
 
-    <script>
-        // Inicializa o mapa focado no Brasil por padrão
-        const map = L.map('map').setView([-23.5505, -46.6333], 13);
+let marker;
 
-        // Adiciona o layout do mapa (Estilo Dark para combinar com o BarberGo)
-        L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+navigator.geolocation.watchPosition(function(position){
 
-        let marker, circle;
+const lat = position.coords.latitude
+const lng = position.coords.longitude
 
-        // Função para atualizar posição
-        function updateLocation(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const accuracy = position.coords.accuracy;
+if(marker){
+marker.setLatLng([lat,lng])
+}else{
 
-            // Remove marcador anterior se existir
-            if (marker) {
-                map.removeLayer(marker);
-                map.removeLayer(circle);
-            }
+marker = L.marker([lat,lng]).addTo(map)
 
-            // Adiciona novo marcador (Sua Foto/Ícone)
-            marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup("Você está aqui").openPopup();
+map.setView([lat,lng],15)
 
-            // Adiciona círculo de precisão
-            circle = L.circle([lat, lng], { radius: accuracy, color: '#D4AF37', fillOpacity: 0.1 }).addTo(map);
+}
 
-            // Centraliza o mapa na posição do usuário
-            map.setView([lat, lng], 16);
-        }
+})
 
-        function handleError(error) {
-            console.error("Erro ao obter localização: ", error);
-            alert("Por favor, ative o GPS para usar o mapa.");
-        }
+</script>
 
-        // Monitoramento em tempo real
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(updateLocation, handleError, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
-        } else {
-            alert("Seu navegador não suporta geolocalização.");
-        }
-    </script>
 </body>
 </html>
