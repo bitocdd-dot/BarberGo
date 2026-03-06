@@ -9,7 +9,7 @@ import {
 } from "../services/location";
 import barbers from "../services/barbersData";
 
-// Fix ícones Leaflet (essencial pra não sumir)
+// Fix ícones Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Ícones customizados pros barbeiros
+// Ícones customizados
 const userIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
@@ -42,7 +42,7 @@ const occupiedIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-// Botão pra recentralizar (fix z-index)
+// Botão recentralizar
 const RecenterControl = ({ position }) => {
   const map = useMap();
   useEffect(() => {
@@ -53,15 +53,11 @@ const RecenterControl = ({ position }) => {
     controlDiv.style.cursor = 'pointer';
     controlDiv.style.padding = '5px';
     controlDiv.innerHTML = '📍';
-    controlDiv.title = 'Voltar pra minha localização';
+    controlDiv.title = 'Minha localização';
     controlDiv.onclick = () => map.setView(position, 13);
-
-    const container = map.getContainer();
-    container.appendChild(controlDiv);
-
-    return () => container.removeChild(controlDiv);
+    map.getContainer().appendChild(controlDiv);
+    return () => map.getContainer().removeChild(controlDiv);
   }, [map, position]);
-
   return null;
 };
 
@@ -78,15 +74,14 @@ const Mapa = () => {
         const pos = await getCurrentLocation();
         setUserPos(pos);
 
-        // Mostra todos barbeiros + distância + status fictício
         const updatedBarbers = barbers.map(b => ({
           ...b,
-          available: b.id % 2 === 1, // ímpar = disponível
+          available: b.id % 2 === 1,
           distance: getDistance(pos.lat, pos.lng, b.lat, b.lng),
         }));
         setNearby(updatedBarbers);
       } catch (err) {
-        console.error("Erro localização:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -110,7 +105,6 @@ const Mapa = () => {
     };
   }, []);
 
-  // Função distância em km
   const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -128,9 +122,9 @@ const Mapa = () => {
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       <MapContainer
         center={[userPos.lat, userPos.lng]}
-        zoom={12}  // Zoom maior pra ver área do RJ
+        zoom={12}
         style={{ height: "100%", width: "100%" }}
-        zoomControl={false}  // Control custom
+        zoomControl={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -151,9 +145,9 @@ const Mapa = () => {
             position={[barber.lat, barber.lng]}
             icon={barber.available ? availableIcon : occupiedIcon}
           >
-            <Popup closeButton={true} autoPan={true}>
-              <div style={{ minWidth: '200px', textAlign: 'center' }}>
-                <h3 style={{ margin: '0 0 5px', color: '#D4AF37' }}>{barber.name}</h3>
+            <Popup closeButton={true} autoPan={true} autoPanPadding={[50, 50]}>
+              <div style={{ minWidth: '220px', textAlign: 'center', padding: '10px' }}>
+                <h3 style={{ margin: '0 0 8px', color: '#D4AF37' }}>{barber.name}</h3>
                 <p style={{ margin: '5px 0' }}>⭐ {barber.rating}</p>
                 <p style={{ margin: '5px 0', fontSize: '14px' }}>{barber.services.join(' • ')}</p>
                 <p style={{ margin: '5px 0', color: '#aaa' }}>{barber.distance} km</p>
@@ -161,17 +155,21 @@ const Mapa = () => {
                   {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
                 </p>
                 <button
-                  onClick={() => window.location.href = `/perfil?barberId=${barber.id}`}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Impede que o popup feche ao clicar no botão
+                    window.location.href = `/perfil?barberId=${barber.id}`;
+                  }}
                   style={{
                     background: '#D4AF37',
                     color: 'black',
                     border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
+                    padding: '12px 24px',
+                    borderRadius: '30px',
                     fontWeight: 'bold',
                     cursor: 'pointer',
                     marginTop: '10px',
-                    width: '100%'
+                    width: '100%',
+                    fontSize: '16px',
                   }}
                 >
                   Ver Perfil
