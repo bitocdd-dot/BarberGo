@@ -10,7 +10,7 @@ import {
 } from "../services/location";
 import barbers from "../services/barbersData";
 
-// Ícones customizados (estilo Uber)
+// Ícones customizados
 const userIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
@@ -38,7 +38,7 @@ const occupiedIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-// Componente pra botão de recentralizar
+// Botão recentralizar
 const RecenterButton = ({ position }) => {
   const map = useMap();
   const buttonRef = useRef(null);
@@ -63,7 +63,7 @@ const RecenterButton = ({ position }) => {
       buttonRef.current = btn;
 
       btn.addEventListener("click", () => {
-        map.setView(position, 15);
+        map.setView(position, 13); // zoom 13 pra ver mais área
       });
     }
   }, [map, position]);
@@ -82,16 +82,27 @@ const Mapa = () => {
       try {
         const pos = await getCurrentLocation();
         setUserPos(pos);
-        setNearby(getNearbyBarbers(pos, barbers));
+        // Mostra todos os barbeiros (remove filtro rígido por enquanto pra testar)
+        const allBarbers = barbers.map(barber => ({
+          ...barber,
+          available: barber.id % 2 === 1, // fictício: ímpar = disponível
+          distance: calculateDistance(pos.lat, pos.lng, barber.lat, barber.lng),
+        }));
+        setNearby(allBarbers);
         setLoading(false);
       } catch (err) {
-        setError("Não conseguimos acessar sua localização. Ative o GPS e permita no navegador.");
+        setError("Não conseguimos acessar sua localização. Ative o GPS e permita.");
         setLoading(false);
       }
 
       const unsubscribe = watchLocation((newPos) => {
         setUserPos(newPos);
-        setNearby(getNearbyBarbers(newPos, barbers));
+        const allBarbers = barbers.map(barber => ({
+          ...barber,
+          available: barber.id % 2 === 1,
+          distance: calculateDistance(newPos.lat, newPos.lng, barber.lat, barber.lng),
+        }));
+        setNearby(allBarbers);
       });
 
       return () => {
@@ -102,6 +113,18 @@ const Mapa = () => {
 
     init();
   }, []);
+
+  // Função auxiliar pra calcular distância (km)
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Raio da Terra em km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
 
   if (loading) {
     return (
@@ -145,7 +168,7 @@ const Mapa = () => {
     <div style={{ height: "100vh", width: "100%" }}>
       <MapContainer
         center={[userPos.lat, userPos.lng]}
-        zoom={15}
+        zoom={11} // zoom menor pra ver mais área (Rio inteiro)
         style={{ height: "100%", width: "100%" }}
         zoomControl={true}
       >
@@ -154,7 +177,6 @@ const Mapa = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
 
-        {/* Botão recentralizar */}
         <RecenterButton position={[userPos.lat, userPos.lng]} />
 
         {/* Usuário */}
@@ -164,7 +186,7 @@ const Mapa = () => {
 
         <Circle
           center={[userPos.lat, userPos.lng]}
-          radius={500} // aumentei pra ver melhor
+          radius={5000} // 5km pra ver melhor
           pathOptions={{ color: "#1E90FF", fillColor: "#1E90FF", fillOpacity: 0.15 }}
         />
 
