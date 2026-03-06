@@ -6,150 +6,210 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Painel do Barbeiro - BarberGo</title>
-
-<link rel="stylesheet" href="style.css">
+<title>Painel do Barbeiro | BarberGo</title>
 
 <style>
 
 body{
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-background-color:#121212;
+margin:0;
+background:#0a0a0a;
 color:white;
-display:flex;
-flex-direction:column;
-align-items:center;
+font-family:Arial;
 padding:20px;
 }
 
-.card{
-background:#1e1e1e;
-padding:20px;
-border-radius:15px;
-width:100%;
-max-width:400px;
-box-shadow:0 4px 15px rgba(0,0,0,0.5);
+.header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.header h1{
+color:gold;
+}
+
+.status{
+background:#1a1a1a;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
 text-align:center;
 }
 
-.btn-finalizar{
-background-color:#28a745;
-color:white;
+.status button{
+
+background:gold;
 border:none;
-padding:15px 30px;
-border-radius:8px;
-font-size:18px;
+padding:12px 20px;
+border-radius:10px;
 font-weight:bold;
 cursor:pointer;
-width:100%;
-margin-top:20px;
-transition:0.3s;
+
 }
 
-.btn-finalizar:hover{
-background-color:#218838;
-transform:scale(1.02);
+.cards{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-bottom:30px;
+
 }
 
-.status-badge{
-background:#ffc107;
+.card{
+
+background:#1a1a1a;
+padding:20px;
+border-radius:15px;
+text-align:center;
+
+}
+
+.numero{
+
+font-size:28px;
+font-weight:bold;
+color:gold;
+
+}
+
+.menu{
+
+display:flex;
+flex-direction:column;
+gap:15px;
+
+}
+
+.menu button{
+
+background:#111;
+border:none;
+color:white;
+padding:15px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+.menu button:hover{
+
+background:gold;
 color:black;
-padding:5px 10px;
-border-radius:5px;
-font-size:12px;
+
 }
 
 </style>
 
 </head>
 
-
 <body>
 
+<div class="header">
+
+<h1>Painel do Barbeiro</h1>
+<p>Controle da sua conta BarberGo</p>
+
+</div>
+
+
+<div class="status">
+
+<p>Status: <strong id="status">Offline</strong></p>
+
+<button onclick="toggleOnline()">Ficar Online</button>
+
+</div>
+
+
+<div class="cards">
+
 <div class="card">
+<div class="numero">4.9</div>
+<p>Avaliação média</p>
+</div>
 
-<h2>Próximo Cliente</h2>
+<div class="card">
+<div class="numero">128</div>
+<p>Clientes atendidos</p>
+</div>
 
-<div style="margin:20px 0;">
+<div class="card">
+<div class="numero">R$ 3.420</div>
+<p>Ganhos totais</p>
+</div>
 
-<p><strong>Nome:</strong> <span id="clienteNome">Aguardando...</span></p>
-
-<p><strong>Serviço:</strong> <span id="clienteServico">---</span></p>
-
-<span class="status-badge">Aguardando Início</span>
+<div class="card">
+<div class="numero">12</div>
+<p>Chamados hoje</p>
+</div>
 
 </div>
 
-<button class="btn-finalizar" onclick="iniciarTrajeto()">
-FINALIZAR E IR AO MAPA
-</button>
+
+<div class="menu">
+
+<button onclick="perfil()">Meu Perfil</button>
+
+<button onclick="mapa()">Ver Mapa</button>
+
+<button onclick="pagamentos()">Pagamentos</button>
+
+<button onclick="suporte()">Suporte</button>
 
 </div>
-
-
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"
-
-import { getDatabase, ref, onValue }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"
-
-
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
-authDomain:"barbergo-2f72c.firebaseapp.com",
-projectId:"barbergo-2f72c",
-storageBucket:"barbergo-2f72c.firebasestorage.app",
-messagingSenderId:"862773297159",
-appId:"1:862773297159:web:041ec66acd9fc4d9692aa2"
-
-}
-
-
-
-const app = initializeApp(firebaseConfig)
-
-const db = getDatabase(app)
-
-
-
-const pedidoRef = ref(db,"pedidoAtual")
-
-
-
-onValue(pedidoRef,(snapshot)=>{
-
-const data = snapshot.val()
-
-if(data){
-
-document.getElementById("clienteNome").innerText = data.cliente
-
-document.getElementById("clienteServico").innerText = data.servico
-
-}
-
-})
-
-
-
-</script>
 
 
 
 <script>
 
-function iniciarTrajeto(){
+let online=false
+
+function toggleOnline(){
+
+online=!online
+
+const status=document.getElementById("status")
+
+if(online){
+
+status.innerText="Online"
+status.style.color="lime"
+
+}else{
+
+status.innerText="Offline"
+status.style.color="red"
+
+}
+
+}
+
+function perfil(){
+
+window.location.href="perfil-barbeiro.html"
+
+}
+
+function mapa(){
 
 window.location.href="mapa.html"
+
+}
+
+function pagamentos(){
+
+window.location.href="pagamento.html"
+
+}
+
+function suporte(){
+
+alert("Suporte BarberGo em breve")
 
 }
 
 </script>
 
 </body>
-
 </html>
