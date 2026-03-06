@@ -9,7 +9,7 @@ import {
 } from "../services/location";
 import barbers from "../services/barbersData";
 
-// Fix ícones Leaflet
+// Fix ícones
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Ícones customizados
+// Ícones custom
 const userIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
@@ -42,7 +42,6 @@ const occupiedIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-// Botão recentralizar
 const RecenterControl = ({ position }) => {
   const map = useMap();
   useEffect(() => {
@@ -81,7 +80,7 @@ const Mapa = () => {
         }));
         setNearby(updatedBarbers);
       } catch (err) {
-        console.error(err);
+        console.error("Erro localização:", err);
       } finally {
         setLoading(false);
       }
@@ -156,8 +155,12 @@ const Mapa = () => {
                 </p>
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Impede que o popup feche ao clicar no botão
-                    window.location.href = `/perfil?barberId=${barber.id}`;
+                    e.stopPropagation();
+                    e.preventDefault();
+                    console.log("Botão Ver Perfil clicado para barbeiro ID:", barber.id); // pra debug
+                    setTimeout(() => {
+                      window.location.href = `/perfil?barberId=${barber.id}`;
+                    }, 100); // delay pequeno pra evento propagar
                   }}
                   style={{
                     background: '#D4AF37',
