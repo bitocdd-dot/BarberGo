@@ -23,51 +23,40 @@ margin-bottom:30px;
 }
 
 .foto{
-
 width:120px;
 height:120px;
 border-radius:100px;
 background:url("https://images.unsplash.com/photo-1621605815971-fbc98d665033") center/cover;
 margin:auto;
 border:3px solid gold;
-
 }
 
 .nome{
-
 font-size:22px;
 margin-top:10px;
 font-weight:bold;
-
 }
 
 .avaliacao{
-
 color:gold;
 margin-top:5px;
-
 }
 
 .grid{
-
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
 margin-top:30px;
-
 }
 
 .corte{
-
 height:120px;
 background-size:cover;
 background-position:center;
 border-radius:10px;
-
 }
 
 .btn{
-
 margin-top:30px;
 background:gold;
 color:black;
@@ -77,7 +66,7 @@ width:100%;
 font-weight:bold;
 border-radius:10px;
 font-size:16px;
-
+cursor:pointer;
 }
 
 </style>
@@ -111,16 +100,45 @@ font-size:16px;
 </div>
 
 <button class="btn" onclick="chamar()">
-
 Chamar Barbeiro
-
 </button>
 
-<script>
+<script type="module">
 
-function chamar(){
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+authDomain: "barbergo-2f72c.firebaseapp.com",
+projectId: "barbergo-2f72c",
+storageBucket: "barbergo-2f72c.firebasestorage.app",
+messagingSenderId: "862773297159",
+appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.chamar = function(){
+
+set(ref(db,'pedidoAtual'),{
+
+barbeiro:"Marcos Barber",
+cliente:"Cliente BarberGo",
+status:"aguardando serviço"
+
+})
+
+alert("Barbeiro chamado!")
+
+setTimeout(()=>{
 
 window.location.href="servicos.html"
+
+},1500)
 
 }
 
