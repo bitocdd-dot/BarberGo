@@ -6,18 +6,24 @@ import {
   getCurrentLocation,
   watchLocation,
   stopWatching,
-  getNearbyBarbers,
 } from "../services/location";
 import barbers from "../services/barbersData";
 
-// Ícones customizados
+// Fix ícones Leaflet (essencial pra não sumir)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
+// Ícones customizados pros barbeiros
 const userIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41],
 });
 
 const availableIcon = new L.Icon({
@@ -26,7 +32,6 @@ const availableIcon = new L.Icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41],
 });
 
 const occupiedIcon = new L.Icon({
@@ -35,37 +40,26 @@ const occupiedIcon = new L.Icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41],
 });
 
-// Botão recentralizar
-const RecenterButton = ({ position }) => {
+// Botão pra recentralizar (fix z-index)
+const RecenterControl = ({ position }) => {
   const map = useMap();
-  const buttonRef = useRef(null);
-
   useEffect(() => {
-    if (!buttonRef.current) {
-      const btn = L.DomUtil.create("button", "recenter-btn");
-      btn.innerHTML = "📍";
-      btn.style.position = "absolute";
-      btn.style.bottom = "80px";
-      btn.style.right = "20px";
-      btn.style.zIndex = "1000";
-      btn.style.background = "#fff";
-      btn.style.border = "2px solid #ccc";
-      btn.style.borderRadius = "50%";
-      btn.style.width = "40px";
-      btn.style.height = "40px";
-      btn.style.cursor = "pointer";
-      btn.style.fontSize = "20px";
-      btn.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
-      map.getContainer().appendChild(btn);
-      buttonRef.current = btn;
+    const controlDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    controlDiv.style.background = 'white';
+    controlDiv.style.border = '2px solid rgba(0,0,0,0.2)';
+    controlDiv.style.borderRadius = '4px';
+    controlDiv.style.cursor = 'pointer';
+    controlDiv.style.padding = '5px';
+    controlDiv.innerHTML = '📍';
+    controlDiv.title = 'Voltar pra minha localização';
+    controlDiv.onclick = () => map.setView(position, 13);
 
-      btn.addEventListener("click", () => {
-        map.setView(position, 13); // zoom 13 pra ver mais área
-      });
-    }
+    const container = map.getContainer();
+    container.appendChild(controlDiv);
+
+    return () => container.removeChild(controlDiv);
   }, [map, position]);
 
   return null;
@@ -75,161 +69,109 @@ const Mapa = () => {
   const [userPos, setUserPos] = useState(null);
   const [nearby, setNearby] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const init = async () => {
+    let unsubscribeWatch;
+
+    const load = async () => {
       try {
         const pos = await getCurrentLocation();
         setUserPos(pos);
-        // Mostra todos os barbeiros (remove filtro rígido por enquanto pra testar)
-        const allBarbers = barbers.map(barber => ({
-          ...barber,
-          available: barber.id % 2 === 1, // fictício: ímpar = disponível
-          distance: calculateDistance(pos.lat, pos.lng, barber.lat, barber.lng),
+
+        // Mostra todos barbeiros + distância + status fictício
+        const updatedBarbers = barbers.map(b => ({
+          ...b,
+          available: b.id % 2 === 1, // ímpar = disponível
+          distance: getDistance(pos.lat, pos.lng, b.lat, b.lng),
         }));
-        setNearby(allBarbers);
-        setLoading(false);
+        setNearby(updatedBarbers);
       } catch (err) {
-        setError("Não conseguimos acessar sua localização. Ative o GPS e permita.");
+        console.error("Erro localização:", err);
+      } finally {
         setLoading(false);
       }
 
-      const unsubscribe = watchLocation((newPos) => {
+      unsubscribeWatch = watchLocation((newPos) => {
         setUserPos(newPos);
-        const allBarbers = barbers.map(barber => ({
-          ...barber,
-          available: barber.id % 2 === 1,
-          distance: calculateDistance(newPos.lat, newPos.lng, barber.lat, barber.lng),
+        const updated = barbers.map(b => ({
+          ...b,
+          available: b.id % 2 === 1,
+          distance: getDistance(newPos.lat, newPos.lng, b.lat, b.lng),
         }));
-        setNearby(allBarbers);
+        setNearby(updated);
       });
-
-      return () => {
-        unsubscribe();
-        stopWatching();
-      };
     };
 
-    init();
+    load();
+
+    return () => {
+      if (unsubscribeWatch) unsubscribeWatch();
+      stopWatching();
+    };
   }, []);
 
-  // Função auxiliar pra calcular distância (km)
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Raio da Terra em km
+  // Função distância em km
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2)**2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    return (R * c).toFixed(1);
   };
 
-  if (loading) {
-    return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#111",
-        color: "#fff",
-        fontSize: "24px",
-      }}>
-        <div>Localizando você...</div>
-        <div style={{ fontSize: "16px", marginTop: "10px", opacity: 0.7 }}>
-          Ative o GPS e permita localização
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff'}}>Carregando mapa...</div>;
 
-  if (error || !userPos) {
-    return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#111",
-        color: "#ff6b6b",
-        fontSize: "20px",
-        textAlign: "center",
-        padding: "20px",
-      }}>
-        {error || "Erro ao carregar o mapa. Tente novamente."}
-      </div>
-    );
-  }
+  if (!userPos) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: 'red'}}>Erro na localização. Ative GPS.</div>;
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       <MapContainer
         center={[userPos.lat, userPos.lng]}
-        zoom={11} // zoom menor pra ver mais área (Rio inteiro)
+        zoom={12}  // Zoom maior pra ver área do RJ
         style={{ height: "100%", width: "100%" }}
-        zoomControl={true}
+        zoomControl={false}  // Control custom
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; OpenStreetMap'
         />
 
-        <RecenterButton position={[userPos.lat, userPos.lng]} />
+        <RecenterControl position={[userPos.lat, userPos.lng]} />
 
-        {/* Usuário */}
         <Marker position={[userPos.lat, userPos.lng]} icon={userIcon}>
-          <Popup>📍 Você está aqui</Popup>
+          <Popup>Você está aqui</Popup>
         </Marker>
 
-        <Circle
-          center={[userPos.lat, userPos.lng]}
-          radius={5000} // 5km pra ver melhor
-          pathOptions={{ color: "#1E90FF", fillColor: "#1E90FF", fillOpacity: 0.15 }}
-        />
+        <Circle center={[userPos.lat, userPos.lng]} radius={5000} color="#3388ff" fillColor="#3388ff" fillOpacity={0.1} />
 
-        {/* Barbeiros */}
-        {nearby.map((barber) => (
+        {nearby.map(barber => (
           <Marker
             key={barber.id}
             position={[barber.lat, barber.lng]}
             icon={barber.available ? availableIcon : occupiedIcon}
           >
-            <Popup>
-              <div style={{ textAlign: "center", minWidth: "220px", padding: "10px" }}>
-                <h3 style={{ margin: "0 0 8px", color: "#D4AF37" }}>{barber.name}</h3>
-                <div style={{ marginBottom: "8px" }}>
-                  {"⭐".repeat(Math.floor(barber.rating))} {barber.rating.toFixed(1)}
-                </div>
-                <p style={{ margin: "4px 0", fontSize: "14px" }}>
-                  {barber.services.join(" • ")}
+            <Popup closeButton={true} autoPan={true}>
+              <div style={{ minWidth: '200px', textAlign: 'center' }}>
+                <h3 style={{ margin: '0 0 5px', color: '#D4AF37' }}>{barber.name}</h3>
+                <p style={{ margin: '5px 0' }}>⭐ {barber.rating}</p>
+                <p style={{ margin: '5px 0', fontSize: '14px' }}>{barber.services.join(' • ')}</p>
+                <p style={{ margin: '5px 0', color: '#aaa' }}>{barber.distance} km</p>
+                <p style={{ color: barber.available ? 'lime' : 'red', fontWeight: 'bold' }}>
+                  {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
                 </p>
-                <p style={{ margin: "4px 0", color: "#aaa" }}>
-                  {barber.distance.toFixed(1)} km de você
-                </p>
-                <p style={{
-                  color: barber.available ? "#00ff00" : "#ff4444",
-                  fontWeight: "bold",
-                  margin: "8px 0",
-                }}>
-                  {barber.available ? "🟢 Disponível agora" : "🔴 Ocupado"}
-                </p>
-
                 <button
                   onClick={() => window.location.href = `/perfil?barberId=${barber.id}`}
                   style={{
-                    background: "#D4AF37",
-                    color: "#000",
-                    border: "none",
-                    padding: "12px 24px",
-                    borderRadius: "30px",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                    marginTop: "10px",
-                    width: "100%",
-                    fontSize: "16px",
+                    background: '#D4AF37',
+                    color: 'black',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '8px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    marginTop: '10px',
+                    width: '100%'
                   }}
                 >
                   Ver Perfil
