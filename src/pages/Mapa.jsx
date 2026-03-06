@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Ícones custom
+// Ícones
 const userIcon = new L.Icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
@@ -42,6 +42,7 @@ const occupiedIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
+// Recenter button
 const RecenterControl = ({ position }) => {
   const map = useMap();
   useEffect(() => {
@@ -73,14 +74,14 @@ const Mapa = () => {
         const pos = await getCurrentLocation();
         setUserPos(pos);
 
-        const updatedBarbers = barbers.map(b => ({
+        const updated = barbers.map(b => ({
           ...b,
           available: b.id % 2 === 1,
           distance: getDistance(pos.lat, pos.lng, b.lat, b.lng),
         }));
-        setNearby(updatedBarbers);
+        setNearby(updated);
       } catch (err) {
-        console.error("Erro localização:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -153,30 +154,25 @@ const Mapa = () => {
                 <p style={{ color: barber.available ? 'lime' : 'red', fontWeight: 'bold' }}>
                   {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
                 </p>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    console.log("Botão Ver Perfil clicado para barbeiro ID:", barber.id); // pra debug
-                    setTimeout(() => {
-                      window.location.href = `/perfil?barberId=${barber.id}`;
-                    }, 100); // delay pequeno pra evento propagar
-                  }}
+                <a
+                  href={`/perfil?barberId=${barber.id}`}
                   style={{
+                    display: 'block',
                     background: '#D4AF37',
                     color: 'black',
-                    border: 'none',
+                    textDecoration: 'none',
                     padding: '12px 24px',
                     borderRadius: '30px',
                     fontWeight: 'bold',
-                    cursor: 'pointer',
                     marginTop: '10px',
                     width: '100%',
                     fontSize: '16px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
                   }}
                 >
                   Ver Perfil
-                </button>
+                </a>
               </div>
             </Popup>
           </Marker>
