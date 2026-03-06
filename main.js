@@ -1,46 +1,72 @@
-// ================================
-// FIREBASE
-// ================================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
-  authDomain: "barbergo-2f72c.firebaseapp.com",
-  projectId: "barbergo-2f72c",
-  storageBucket: "barbergo-2f72c.firebasestorage.app",
-  messagingSenderId: "862773297159",
-  appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
+apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+authDomain: "barbergo-2f72c.firebaseapp.com",
+projectId: "barbergo-2f72c",
+storageBucket: "barbergo-2f72c.firebasestorage.app",
+messagingSenderId: "862773297159",
+appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
-// =================================
-// CLIENTE SOLICITA BARBEIRO
-// =================================
 
-window.pedirBarbeiro = function(nome,servico){
+// CLIENTE CHAMA BARBEIRO
+
+window.chamarBarbeiro = function(nomeCliente, servico, barbeiro){
 
 set(ref(db,'pedidoAtual'),{
 
-cliente:nome,
+cliente:nomeCliente,
+barbeiro:barbeiro,
 servico:servico,
-status:"aguardando",
-timestamp:Date.now()
+status:"procurando"
 
 })
 
-alert("Barbeiro chamado com sucesso!")
+alert("Pedido enviado para o barbeiro")
 
 }
 
 
-// =================================
-// BARBEIRO RECEBE PEDIDO
-// =================================
+
+// BARBEIRO ACEITA PEDIDO
+
+window.aceitarPedido = function(){
+
+update(ref(db,'pedidoAtual'),{
+
+status:"aceito"
+
+})
+
+alert("Você aceitou o cliente")
+
+}
+
+
+
+// BARBEIRO INDO ATÉ CLIENTE
+
+window.irCliente = function(){
+
+update(ref(db,'pedidoAtual'),{
+
+status:"caminho"
+
+})
+
+window.location.href="mapa.html"
+
+}
+
+
+
+// OUVIR STATUS DO PEDIDO
 
 const pedidoRef = ref(db,'pedidoAtual')
 
@@ -48,49 +74,14 @@ onValue(pedidoRef,(snapshot)=>{
 
 const data = snapshot.val()
 
-if(data){
+if(!data) return
 
-const cliente = document.getElementById("clienteNome")
-const servico = document.getElementById("clienteServico")
+const status = document.getElementById("statusPedido")
 
-if(cliente) cliente.innerText = data.cliente
-if(servico) servico.innerText = data.servico
+if(status){
+
+status.innerText = data.status
 
 }
 
 })
-
-
-// =================================
-// ABRIR PERFIL DO BARBEIRO
-// =================================
-
-window.verPerfilBarbeiro = function(id){
-
-localStorage.setItem("barbeiroSelecionado",id)
-
-window.location.href="perfil-barbeiro.html"
-
-}
-
-
-// =================================
-// MOSTRAR BARBEIROS NO MAPA
-// =================================
-
-window.mostrarBarbeiroNoMapa = function(mapa,lat,lng,nome){
-
-const marcador = L.marker([lat,lng]).addTo(mapa)
-
-marcador.bindPopup(
-
-`
-<b>${nome}</b><br>
-<button onclick="verPerfilBarbeiro('${nome}')">
-Ver perfil
-</button>
-`
-
-)
-
-}
