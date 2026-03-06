@@ -4,14 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Mapa BarberGo</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -20,12 +20,15 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 body{
 margin:0;
 padding:0;
+font-family:Arial;
 }
 
 #map{
 height:100vh;
 width:100%;
 }
+
+/* caixa topo */
 
 .info-box{
 position:absolute;
@@ -41,6 +44,50 @@ z-index:1000;
 box-shadow:0 0 10px rgba(0,0,0,0.5);
 }
 
+/* contador clientes */
+
+.clientes-box{
+position:absolute;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+background:gold;
+color:black;
+padding:10px 20px;
+border-radius:10px;
+font-weight:bold;
+z-index:1000;
+}
+
+/* menu lateral */
+
+.menu{
+position:absolute;
+top:20px;
+right:20px;
+z-index:1000;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.menu button{
+
+background:#111;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+
+}
+
+.menu button:hover{
+background:gold;
+color:black;
+}
+
 </style>
 
 </head>
@@ -49,6 +96,20 @@ box-shadow:0 0 10px rgba(0,0,0,0.5);
 
 <div class="info-box">
 Barbeiro a caminho do cliente
+</div>
+
+<div class="clientes-box">
+🔥 8 clientes procurando barbeiro agora
+</div>
+
+<div class="menu">
+
+<button onclick="abrirPerfil()">Meu Perfil</button>
+
+<button onclick="verBarbeiros()">Barbeiros</button>
+
+<button onclick="suporte()">Suporte</button>
+
 </div>
 
 <div id="map"></div>
@@ -122,8 +183,29 @@ rotaLinha = L.polyline([
 
 })
 
+
+
+/* BOTÕES */
+
+function abrirPerfil(){
+
+window.location.href="perfil-cliente.html"
+
+}
+
+function verBarbeiros(){
+
+window.location.href="barbeiros-disponiveis.html"
+
+}
+
+function suporte(){
+
+alert("Suporte BarberGo em breve")
+
+}
+
 </script>
 
 </body>
-
 </html>
