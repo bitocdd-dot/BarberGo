@@ -1,8 +1,12 @@
 import React from "react";
-import Mapa from "./pages/Mapa.jsx";
+import Mapa from "./pages/Mapa";
 
 function App() {
-  return <Mapa />;
+  return (
+    <div>
+      <Mapa />
+    </div>
+  );
 }
 
 export default App;
