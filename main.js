@@ -1,35 +1,52 @@
-// 1. Inicializa o mapa focado no Brasil (por enquanto)
-const map = L.map('map').setView([-23.5505, -46.6333], 13);
+// FIREBASE
 
-// 2. Adiciona o desenho do mapa (OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-}).addTo(map);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// 3. Criar o ícone (marcador) no mapa
-let marker = L.marker([-23.5505, -46.6333]).addTo(map);
+const firebaseConfig = {
+  apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+  authDomain: "barbergo-2f72c.firebaseapp.com",
+  projectId: "barbergo-2f72c",
+  storageBucket: "barbergo-2f72c.firebasestorage.app",
+  messagingSenderId: "862773297159",
+  appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
+};
 
-// 4. Função para atualizar a posição em tempo real
-function atualizarPosicao() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition((position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-            // Move o marcador e o mapa para a nova posição
-            const novaPosicao = [lat, lon];
-            marker.setLatLng(novaPosicao);
-            map.setView(novaPosicao);
-            
-            document.getElementById('status').innerText = "Localização atualizada!";
-        }, (error) => {
-            console.error("Erro ao pegar GPS:", error);
-            document.getElementById('status').innerText = "Erro ao acessar GPS.";
-        }, {
-            enableHighAccuracy: true // Usa o GPS de alta precisão
-        });
-    }
+
+// CLIENTE SOLICITA BARBEIRO
+
+function pedirBarbeiro(nome, servico){
+
+set(ref(db, 'pedidoAtual'),{
+
+cliente:nome,
+servico:servico,
+status:"aguardando"
+
+})
+
 }
 
-// Inicia a busca assim que a tela carrega
-window.onload = atualizarPosicao;
+
+// BARBEIRO RECEBE PEDIDO
+
+const pedidoRef = ref(db,'pedidoAtual')
+
+onValue(pedidoRef,(snapshot)=>{
+
+const data = snapshot.val()
+
+if(data){
+
+const cliente = document.getElementById("clienteNome")
+const servico = document.getElementById("clienteServico")
+
+if(cliente) cliente.innerText = data.cliente
+if(servico) servico.innerText = data.servico
+
+}
+
+})
