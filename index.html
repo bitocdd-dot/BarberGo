@@ -1,135 +1,133 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BarberGo | Premium Experience</title>
+<title>BarberGo</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
-:root{
---gold:#D4AF37;
---black:#0a0a0a;
---zinc:#1a1a1a;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
 body{
-background-color:var(--black);
-color:white;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-text-align:center;
-padding:20px;
-
-background-image:
-linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),
-url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70');
-
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-}
-
-.card{
-background:rgba(26,26,26,0.95);
-padding:40px 25px;
-border-radius:24px;
-border:1px solid rgba(212,175,55,0.3);
-max-width:350px;
-width:100%;
-box-shadow:0 20px 40px rgba(0,0,0,0.6);
-}
-
-.logo{
-font-size:28px;
-font-weight:900;
-color:var(--gold);
-margin-bottom:10px;
-}
-
-.logo span{
+margin:0;
+font-family:Segoe UI;
+background:#0a0a0a;
 color:white;
 }
 
-h1{
-font-size:32px;
-margin-bottom:15px;
-background:linear-gradient(to bottom,#fff,#888);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-p{
-color:#888;
-font-size:15px;
-margin-bottom:35px;
-line-height:1.5;
-}
-
-.btn{
-background:var(--gold);
-color:black;
-text-decoration:none;
-padding:18px;
-border-radius:14px;
-font-weight:800;
-display:block;
-text-transform:uppercase;
-box-shadow:0 8px 20px rgba(212,175,55,0.2);
-border:none;
+#map{
+height:100vh;
 width:100%;
-cursor:pointer;
-font-family:inherit;
 }
 
-.footer-link{
-margin-top:25px;
-color:#555;
-font-size:13px;
-text-decoration:none;
-display:block;
-transition:0.3s;
-}
+.topbar{
 
-.footer-link:hover{
-color:var(--gold);
+position:absolute;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:#1a1a1a;
+padding:10px 20px;
+border-radius:20px;
+font-weight:bold;
+z-index:999;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="card">
-
-<div class="logo">BARBER<span>GO</span></div>
-
-<h1>Sua barbearia, onde você estiver.</h1>
-
-<p>O serviço premium que você merece, agora na palma da sua mão.</p>
-
-<button class="btn" onclick="window.location.href='barbeiros-disponiveis.html'">
-Chamar Barbeiro
-</button>
-
-<a href="painel-barbeiro.html" class="footer-link">
-Sou um profissional →
-</a>
-
+<div class="topbar">
+BARBERGO • Barbeiros próximos
 </div>
 
-<script type="module" src="main.js"></script>
+<div id="map"></div>
+
+<script>
+
+const map = L.map('map').setView([-22.9068, -43.1729], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+maxZoom:19,
+
+}).addTo(map);
+
+let clienteMarker;
+
+navigator.geolocation.watchPosition(function(position){
+
+const lat = position.coords.latitude
+const lng = position.coords.longitude
+
+if(clienteMarker){
+
+clienteMarker.setLatLng([lat,lng])
+
+}else{
+
+clienteMarker = L.marker([lat,lng]).addTo(map)
+
+.bindPopup("Você está aqui")
+
+map.setView([lat,lng],15)
+
+}
+
+})
+
+
+// BARBEIROS EXEMPLO
+
+const barbeiros = [
+
+{
+nome:"Marcos Barber",
+lat:-22.908,
+lng:-43.175
+},
+
+{
+nome:"Carlos Fade",
+lat:-22.904,
+lng:-43.170
+}
+
+]
+
+
+barbeiros.forEach(function(barbeiro){
+
+const marker = L.marker([barbeiro.lat,barbeiro.lng]).addTo(map)
+
+marker.bindPopup(
+
+"<b>"+barbeiro.nome+"</b><br><br><button onclick='verPerfil()'>Ver perfil</button>"
+
+)
+
+})
+
+function verPerfil(){
+
+window.location.href="perfil-barbeiro.html"
+
+}
+
+</script>
 
 </body>
 </html>
