@@ -1,85 +1,197 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberGo | Pagamento Seguro</title>
-    <style>
-        :root { --gold: #D4AF37; --black: #0a0a0a; --zinc: #1a1a1a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--black); color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center; }
-        
-        .pix-card {
-            background: var(--zinc); padding: 40px 25px; border-radius: 28px;
-            border: 1px solid rgba(212, 175, 55, 0.3); width: 100%; max-width: 360px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
 
-        .header-pix { margin-bottom: 25px; }
-        .header-pix h2 { color: var(--gold); font-size: 22px; margin-bottom: 10px; }
-        .header-pix p { color: #888; font-size: 14px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .qr-placeholder {
-            width: 200px; height: 200px; background: white; margin: 0 auto 25px;
-            border-radius: 15px; padding: 15px; display: flex; align-items: center; justify-content: center;
-        }
-        .qr-placeholder img { width: 100%; height: 100%; opacity: 0.8; }
+<title>BarberGo | Pagamento Seguro</title>
 
-        .pix-key-box {
-            background: #000; padding: 15px; border-radius: 12px; border: 1px dashed var(--gold);
-            font-size: 12px; margin-bottom: 25px; word-break: break-all; color: #ccc;
-        }
+<style>
 
-        .btn-copiar {
-            background: var(--gold); color: black; border: none; width: 100%;
-            padding: 18px; border-radius: 14px; font-weight: 800; cursor: pointer;
-            text-transform: uppercase; margin-bottom: 15px;
-        }
+:root{
+--gold:#D4AF37;
+--black:#0a0a0a;
+--zinc:#1a1a1a;
+}
 
-        .timer { font-size: 13px; color: #555; }
-    </style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:var(--black);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+padding:20px;
+text-align:center;
+}
+
+.pix-card{
+background:var(--zinc);
+padding:40px 25px;
+border-radius:28px;
+border:1px solid rgba(212,175,55,0.3);
+width:100%;
+max-width:360px;
+box-shadow:0 20px 50px rgba(0,0,0,0.8);
+}
+
+.header-pix{
+margin-bottom:25px;
+}
+
+.header-pix h2{
+color:var(--gold);
+font-size:22px;
+margin-bottom:10px;
+}
+
+.qr-placeholder{
+width:200px;
+height:200px;
+background:white;
+margin:0 auto 25px;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.qr-placeholder img{
+width:100%;
+height:100%;
+}
+
+.pix-key-box{
+background:#000;
+padding:15px;
+border-radius:12px;
+border:1px dashed var(--gold);
+font-size:12px;
+margin-bottom:25px;
+word-break:break-all;
+color:#ccc;
+}
+
+.btn-copiar{
+background:var(--gold);
+color:black;
+border:none;
+width:100%;
+padding:18px;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+text-transform:uppercase;
+margin-bottom:15px;
+}
+
+.timer{
+font-size:13px;
+color:#555;
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="pix-card">
-        <div class="header-pix">
-            <h2>Pagamento via PIX</h2>
-            <p>Total a pagar: <strong style="color:white">R$ 55,00</strong></p>
-        </div>
+<div class="pix-card">
 
-        <div class="qr-placeholder">
-            <!-- Imagem de um QR Code genérico -->
-            <img src="https://api.qrserver.com" alt="QR Code PIX">
-        </div>
+<div class="header-pix">
 
-        <div class="pix-key-box" id="chavePix">
-            00020126580014br.gov.bcb.pix0136barbergo-pix-key-1234567890520400005303986
-        </div>
+<h2>Pagamento via PIX</h2>
 
-        <button class="btn-copiar" onclick="copiarChave()">Copiar Chave PIX</button>
-        
-        <p class="timer">Este código expira em <span id="time">05:00</span></p>
-        
-        <a href="index.html" style="color:#444; display:block; margin-top:20px; font-size:12px; text-decoration:none;">Cancelar Pagamento</a>
-    </div>
+<p>Total a pagar: <strong style="color:white">R$55,00</strong></p>
 
-    <script>
-        function copiarChave() {
-            alert('Chave PIX copiada para a área de transferência!');
-            setTimeout(() => {
-                window.location.href = 'mapa.html'; // Simula que o pagamento foi identificado
-            }, 2000);
-        }
+</div>
 
-        // Simulação simples de timer
-        let duration = 300;
-        let display = document.querySelector('#time');
-        setInterval(() => {
-            let minutes = parseInt(duration / 60, 10);
-            let seconds = parseInt(duration % 60, 10);
-            display.textContent = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-            if (--duration < 0) duration = 300;
-        }, 1000);
-    </script>
+<div class="qr-placeholder">
+
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BARBERGO_PIX">
+
+</div>
+
+<div class="pix-key-box" id="chavePix">
+
+00020126580014br.gov.bcb.pix0136barbergo-pix-key-1234567890520400005303986
+
+</div>
+
+<button class="btn-copiar" onclick="pagar()">Já paguei</button>
+
+<p class="timer">
+
+Este código expira em <span id="time">05:00</span>
+
+</p>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+authDomain: "barbergo-2f72c.firebaseapp.com",
+projectId: "barbergo-2f72c",
+storageBucket: "barbergo-2f72c.firebasestorage.app",
+messagingSenderId: "862773297159",
+appId: "1:862773297159:web:041ec66acd9fc4d9692aa2"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.pagar=function(){
+
+set(ref(db,'pedidoAtual/status'),"pago")
+
+alert("Pagamento confirmado!")
+
+setTimeout(()=>{
+
+window.location.href="mapa.html"
+
+},1500)
+
+}
+
+</script>
+
+<script>
+
+let duration=300
+
+let display=document.querySelector('#time')
+
+setInterval(()=>{
+
+let minutes=parseInt(duration/60,10)
+
+let seconds=parseInt(duration%60,10)
+
+display.textContent=(minutes<10?"0"+minutes:minutes)+":"+(seconds<10?"0"+seconds:seconds)
+
+if(--duration<0) duration=300
+
+},1000)
+
+</script>
+
 </body>
+
 </html>
