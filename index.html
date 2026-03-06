@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,127 +8,16 @@
 
 <title>BarberGo</title>
 
-<link rel="stylesheet" href="style.css">
+<script>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+window.location.href="mapa.html"
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<style>
-
-body{
-margin:0;
-font-family:Segoe UI;
-background:#0a0a0a;
-color:white;
-}
-
-#map{
-height:100vh;
-width:100%;
-}
-
-.topbar{
-
-position:absolute;
-top:15px;
-left:50%;
-transform:translateX(-50%);
-background:#1a1a1a;
-padding:10px 20px;
-border-radius:20px;
-font-weight:bold;
-z-index:999;
-
-}
-
-</style>
+</script>
 
 </head>
 
 <body>
 
-<div class="topbar">
-BARBERGO • Barbeiros próximos
-</div>
-
-<div id="map"></div>
-
-<script>
-
-const map = L.map('map').setView([-22.9068, -43.1729], 13);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-
-maxZoom:19,
-
-}).addTo(map);
-
-let clienteMarker;
-
-navigator.geolocation.watchPosition(function(position){
-
-const lat = position.coords.latitude
-const lng = position.coords.longitude
-
-if(clienteMarker){
-
-clienteMarker.setLatLng([lat,lng])
-
-}else{
-
-clienteMarker = L.marker([lat,lng]).addTo(map)
-
-.bindPopup("Você está aqui")
-
-map.setView([lat,lng],15)
-
-}
-
-})
-
-
-// BARBEIROS EXEMPLO
-
-const barbeiros = [
-
-{
-nome:"Marcos Barber",
-lat:-22.908,
-lng:-43.175
-},
-
-{
-nome:"Carlos Fade",
-lat:-22.904,
-lng:-43.170
-}
-
-]
-
-
-barbeiros.forEach(function(barbeiro){
-
-const marker = L.marker([barbeiro.lat,barbeiro.lng]).addTo(map)
-
-marker.bindPopup(
-
-"<b>"+barbeiro.nome+"</b><br><br><button onclick='verPerfil()'>Ver perfil</button>"
-
-)
-
-})
-
-function verPerfil(){
-
-window.location.href="perfil-barbeiro.html"
-
-}
-
-</script>
-
 </body>
+
 </html>
