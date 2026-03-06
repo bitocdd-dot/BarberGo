@@ -1,39 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Barbeiro - BarberGo</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; }
-        .btn-finalizar { background-color: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-finalizar:hover { background-color: #218838; transform: scale(1.02); }
-        .status-badge { background: #ffc107; color: black; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel do Barbeiro - BarberGo</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+background-color:#121212;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:20px;
+}
+
+.card{
+background:#1e1e1e;
+padding:20px;
+border-radius:15px;
+width:100%;
+max-width:400px;
+box-shadow:0 4px 15px rgba(0,0,0,0.5);
+text-align:center;
+}
+
+.btn-finalizar{
+background-color:#28a745;
+color:white;
+border:none;
+padding:15px 30px;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+width:100%;
+margin-top:20px;
+transition:0.3s;
+}
+
+.btn-finalizar:hover{
+background-color:#218838;
+transform:scale(1.02);
+}
+
+.status-badge{
+background:#ffc107;
+color:black;
+padding:5px 10px;
+border-radius:5px;
+font-size:12px;
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="card">
-        <h2>Próximo Cliente</h2>
-        <div style="margin: 20px 0;">
-            <p><strong>Nome:</strong> João Silva</p>
-            <p><strong>Serviço:</strong> Corte Degradê</p>
-            <span class="status-badge">Aguardando Início</span>
-        </div>
-        
-        <!-- BOTÃO QUE CHAMA O MAPA -->
-        <button class="btn-finalizar" onclick="iniciarTrajeto()">
-            FINALIZAR E IR AO MAPA
-        </button>
-    </div>
+<div class="card">
 
-    <script>
-        function iniciarTrajeto() {
-            // Salva um aviso visual e redireciona
-            window.location.href = "mapa.html";
-        }
-    </script>
+<h2>Próximo Cliente</h2>
+
+<div style="margin:20px 0;">
+
+<p><strong>Nome:</strong> <span id="clienteNome">Aguardando...</span></p>
+
+<p><strong>Serviço:</strong> <span id="clienteServico">---</span></p>
+
+<span class="status-badge">Aguardando Início</span>
+
+</div>
+
+<button class="btn-finalizar" onclick="iniciarTrajeto()">
+FINALIZAR E IR AO MAPA
+</button>
+
+</div>
+
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"
+
+import { getDatabase, ref, onValue }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"
+
+
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBe-xiVQFqy_rdw5pAUXmSQ7fQ6RZpLQ_Q",
+authDomain:"barbergo-2f72c.firebaseapp.com",
+projectId:"barbergo-2f72c",
+storageBucket:"barbergo-2f72c.firebasestorage.app",
+messagingSenderId:"862773297159",
+appId:"1:862773297159:web:041ec66acd9fc4d9692aa2"
+
+}
+
+
+
+const app = initializeApp(firebaseConfig)
+
+const db = getDatabase(app)
+
+
+
+const pedidoRef = ref(db,"pedidoAtual")
+
+
+
+onValue(pedidoRef,(snapshot)=>{
+
+const data = snapshot.val()
+
+if(data){
+
+document.getElementById("clienteNome").innerText = data.cliente
+
+document.getElementById("clienteServico").innerText = data.servico
+
+}
+
+})
+
+
+
+</script>
+
+
+
+<script>
+
+function iniciarTrajeto(){
+
+window.location.href="mapa.html"
+
+}
+
+</script>
+
 </body>
+
 </html>
