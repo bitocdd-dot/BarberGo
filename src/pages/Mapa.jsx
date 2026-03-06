@@ -42,7 +42,6 @@ const occupiedIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-// Recenter button
 const RecenterControl = ({ position }) => {
   const map = useMap();
   useEffect(() => {
@@ -65,6 +64,7 @@ const Mapa = () => {
   const [userPos, setUserPos] = useState(null);
   const [nearby, setNearby] = useState([]);
   const [loading, setLoading] = useState(true);
+  const mapRef = useRef(null);
 
   useEffect(() => {
     let unsubscribeWatch;
@@ -114,6 +114,15 @@ const Mapa = () => {
     return (R * c).toFixed(1);
   };
 
+  const handleVerPerfil = (barberId) => {
+    if (mapRef.current) {
+      mapRef.current.closePopup(); // Fecha popup pra não travar
+    }
+    setTimeout(() => {
+      window.location.href = `/perfil?barberId=${barberId}`;
+    }, 100); // Delay pra garantir que o popup feche
+  };
+
   if (loading) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff'}}>Carregando mapa...</div>;
 
   if (!userPos) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: 'red'}}>Erro na localização. Ative GPS.</div>;
@@ -125,6 +134,7 @@ const Mapa = () => {
         zoom={12}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
+        whenCreated={(mapInstance) => { mapRef.current = mapInstance; }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -154,25 +164,27 @@ const Mapa = () => {
                 <p style={{ color: barber.available ? 'lime' : 'red', fontWeight: 'bold' }}>
                   {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
                 </p>
-                <a
-                  href={`/perfil?barberId=${barber.id}`}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleVerPerfil(barber.id);
+                  }}
                   style={{
-                    display: 'block',
                     background: '#D4AF37',
                     color: 'black',
-                    textDecoration: 'none',
+                    border: 'none',
                     padding: '12px 24px',
                     borderRadius: '30px',
                     fontWeight: 'bold',
+                    cursor: 'pointer',
                     marginTop: '10px',
                     width: '100%',
                     fontSize: '16px',
-                    textAlign: 'center',
-                    cursor: 'pointer',
                   }}
                 >
                   Ver Perfil
-                </a>
+                </button>
               </div>
             </Popup>
           </Marker>
