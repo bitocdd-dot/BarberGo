@@ -1,4 +1,6 @@
+// ================================
 // FIREBASE
+// ================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -16,22 +18,29 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
+// =================================
 // CLIENTE SOLICITA BARBEIRO
+// =================================
 
-function pedirBarbeiro(nome, servico){
+window.pedirBarbeiro = function(nome,servico){
 
-set(ref(db, 'pedidoAtual'),{
+set(ref(db,'pedidoAtual'),{
 
 cliente:nome,
 servico:servico,
-status:"aguardando"
+status:"aguardando",
+timestamp:Date.now()
 
 })
+
+alert("Barbeiro chamado com sucesso!")
 
 }
 
 
+// =================================
 // BARBEIRO RECEBE PEDIDO
+// =================================
 
 const pedidoRef = ref(db,'pedidoAtual')
 
@@ -50,3 +59,38 @@ if(servico) servico.innerText = data.servico
 }
 
 })
+
+
+// =================================
+// ABRIR PERFIL DO BARBEIRO
+// =================================
+
+window.verPerfilBarbeiro = function(id){
+
+localStorage.setItem("barbeiroSelecionado",id)
+
+window.location.href="perfil-barbeiro.html"
+
+}
+
+
+// =================================
+// MOSTRAR BARBEIROS NO MAPA
+// =================================
+
+window.mostrarBarbeiroNoMapa = function(mapa,lat,lng,nome){
+
+const marcador = L.marker([lat,lng]).addTo(mapa)
+
+marcador.bindPopup(
+
+`
+<b>${nome}</b><br>
+<button onclick="verPerfilBarbeiro('${nome}')">
+Ver perfil
+</button>
+`
+
+)
+
+}
