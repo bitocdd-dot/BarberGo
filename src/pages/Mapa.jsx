@@ -1,51 +1,68 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import barbers from "../services/barbersData";
+import { supabase } from "../services/supabase";
 
-function Mapa() {
-  const [userLocation, setUserLocation] = useState(null);
+function Mapa(){
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setUserLocation([
-        position.coords.latitude,
-        position.coords.longitude
-      ]);
-    });
-  }, []);
+const [barbers,setBarbers] = useState([])
+const [userLocation,setUserLocation] = useState(null)
 
-  if (!userLocation) {
-    return <h2>Carregando mapa...</h2>;
-  }
+useEffect(()=>{
 
-  return (
-    <MapContainer
-      center={userLocation}
-      zoom={15}
-      style={{ height: "100vh", width: "100%" }}
-    >
-      <TileLayer
-        attribution="&copy; OpenStreetMap"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+navigator.geolocation.getCurrentPosition((pos)=>{
 
-      {/* Localização do cliente */}
-      <Marker position={userLocation}>
-        <Popup>Você está aqui 📍</Popup>
-      </Marker>
+setUserLocation([
+pos.coords.latitude,
+pos.coords.longitude
+])
 
-      {/* Barbeiros no mapa */}
-      {barbers.map((barber) => (
-        <Marker key={barber.id} position={[barber.lat, barber.lng]}>
-          <Popup>
-            💈 {barber.nome} <br />
-            ⭐ Avaliação: {barber.rating}
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
-  );
+})
+
+loadBarbers()
+
+},[])
+
+async function loadBarbers(){
+
+const { data } = await supabase
+.from("barbers")
+.select("*")
+
+setBarbers(data)
+
 }
 
-export default Mapa;
+if(!userLocation){
+return <h2>Carregando mapa...</h2>
+}
+
+return(
+
+<MapContainer center={userLocation} zoom={15} style={{height:"100vh"}}>
+
+<TileLayer
+url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+/>
+
+<Marker position={userLocation}>
+<Popup>Você está aqui</Popup>
+</Marker>
+
+{barbers.map((b)=>(
+<Marker key={b.id} position={[b.lat,b.lng]}>
+<Popup>
+💈 {b.nome}
+<br/>
+⭐ {b.rating}
+</Popup>
+</Marker>
+))}
+
+</MapContainer>
+
+)
+
+}
+
+export default Mapa
