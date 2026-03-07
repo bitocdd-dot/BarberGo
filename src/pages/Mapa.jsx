@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -102,6 +102,7 @@ const Mapa = () => {
         zoom={14}
         style={{ height: "100%", width: "100%" }}
       >
+
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         <Marker position={[userPos.lat, userPos.lng]} icon={userIcon} />
@@ -118,28 +119,14 @@ const Mapa = () => {
             key={barber.id}
             position={[barber.lat, barber.lng]}
             icon={barberIcon}
-          >
-            <Popup>
-              <div style={{textAlign:"center"}}>
-                <b>{barber.name}</b>
-                <p>⭐ {barber.rating}</p>
-
-                <button
-                  style={{
-                    padding:"8px 14px",
-                    background:"#D4AF37",
-                    border:"none",
-                    borderRadius:"8px",
-                    fontWeight:"bold"
-                  }}
-                  onClick={() => setSelectedBarber(barber)}
-                >
-                  Ver barbeiro
-                </button>
-              </div>
-            </Popup>
-          </Marker>
+            eventHandlers={{
+              click: () => {
+                setSelectedBarber(barber);
+              },
+            }}
+          />
         ))}
+
       </MapContainer>
 
       {selectedBarber && (
@@ -149,20 +136,25 @@ const Mapa = () => {
           left:0,
           right:0,
           background:"#000",
-          padding:"15px",
+          padding:"20px",
           borderTopLeftRadius:"20px",
           borderTopRightRadius:"20px"
         }}>
-          <h3 style={{color:"#fff",margin:0}}>
+
+          <h2 style={{color:"#fff",margin:0}}>
             {selectedBarber.name}
-          </h3>
+          </h2>
 
           <p style={{color:"#D4AF37"}}>
             {"⭐".repeat(Math.floor(selectedBarber.rating))}
           </p>
 
+          <p style={{color:"#aaa"}}>
+            Corte • Barba • Sobrancelha
+          </p>
+
           <button
-            onClick={() => window.location.href="/pagamento"}
+            onClick={() => window.location.href="/perfil"}
             style={{
               width:"100%",
               marginTop:"10px",
@@ -173,8 +165,24 @@ const Mapa = () => {
               fontWeight:"bold"
             }}
           >
+            VER PERFIL
+          </button>
+
+          <button
+            onClick={() => window.location.href="/pagamento"}
+            style={{
+              width:"100%",
+              marginTop:"10px",
+              padding:"14px",
+              borderRadius:"10px",
+              border:"none",
+              background:"#fff",
+              fontWeight:"bold"
+            }}
+          >
             CHAMAR BARBEIRO
           </button>
+
         </div>
       )}
 
