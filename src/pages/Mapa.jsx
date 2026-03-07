@@ -1,210 +1,98 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import { useState } from "react"
 
-import {
-  getCurrentLocation,
-  watchLocation,
-  stopWatching,
-} from "../services/location";
-
-import barbers from "../services/barbersData";
-
-const userIcon = L.icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64113.png",
-  iconSize: [35, 35],
-});
-
-const barberIcon = L.icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/921/921347.png",
-  iconSize: [35, 35],
-});
-
-const Mapa = () => {
-  const [userPos, setUserPos] = useState(null);
-  const [selectedBarber, setSelectedBarber] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const pos = await getCurrentLocation();
-        setUserPos(pos);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-
-      watchLocation((newPos) => {
-        setUserPos(newPos);
-      });
-    };
-
-    load();
-
-    return () => {
-      stopWatching();
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#000",color:"#fff"}}>
-        Carregando mapa...
-      </div>
-    );
+const barbeiros = [
+  {
+    id:1,
+    nome:"Carlos Barber",
+    lat:-22.836,
+    lng:-43.273,
+    rating:4.9,
+    avaliacoes:120
+  },
+  {
+    id:2,
+    nome:"Rafael Corte",
+    lat:-22.834,
+    lng:-43.270,
+    rating:4.8,
+    avaliacoes:98
   }
+]
 
-  if (!userPos) {
-    return (
-      <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#000",color:"red"}}>
-        Ative o GPS
-      </div>
-    );
-  }
+export default function Mapa(){
 
-  return (
-    <div style={{ height: "100vh", width: "100%", position: "relative", background:"#000" }}>
+  const [barbeiro,setBarbeiro] = useState(null)
 
-      <div style={{
-        position:"absolute",
-        top:0,
-        left:0,
-        right:0,
-        zIndex:1000,
-        background:"#000",
-        padding:"12px",
-        display:"flex",
-        justifyContent:"space-between"
-      }}>
-        <h1 style={{color:"#D4AF37",margin:0}}>BarberGo</h1>
-        <span style={{color:"#fff"}}>Suporte</span>
-      </div>
+  return(
 
-      <div style={{
-        position:"absolute",
-        top:"55px",
-        left:0,
-        right:0,
-        zIndex:1000,
-        background:"#D4AF37",
-        padding:"10px",
-        textAlign:"center",
-        fontWeight:"bold"
-      }}>
-        🔥 8 clientes procurando barbeiro agora
-      </div>
+    <div style={{height:"100vh",width:"100%",position:"relative"}}>
 
       <MapContainer
-        center={[userPos.lat, userPos.lng]}
-        zoom={14}
-        style={{ height: "100%", width: "100%" }}
+        center={[-22.836,-43.272]}
+        zoom={15}
+        style={{height:"100%",width:"100%"}}
       >
 
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-        <Marker position={[userPos.lat, userPos.lng]} icon={userIcon} />
-
-        <Circle
-          center={[userPos.lat, userPos.lng]}
-          radius={500}
-          color="#136AEC"
-          fillOpacity={0.2}
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {barbers.map((barber) => (
+        {barbeiros.map(b=>(
           <Marker
-            key={barber.id}
-            position={[barber.lat, barber.lng]}
-            icon={barberIcon}
+            key={b.id}
+            position={[b.lat,b.lng]}
             eventHandlers={{
-              click: () => {
-                setSelectedBarber(barber);
-              },
+              click:()=>setBarbeiro(b)
             }}
           />
         ))}
 
       </MapContainer>
 
-      {selectedBarber && (
+      {barbeiro &&(
+
         <div style={{
           position:"absolute",
-          bottom:"70px",
-          left:0,
-          right:0,
+          bottom:"0",
+          left:"0",
+          right:"0",
           background:"#000",
+          color:"#fff",
           padding:"20px",
           borderTopLeftRadius:"20px",
-          borderTopRightRadius:"20px"
+          borderTopRightRadius:"20px",
+          zIndex:9999
         }}>
 
-          <h2 style={{color:"#fff",margin:0}}>
-            {selectedBarber.name}
-          </h2>
+          <h2>{barbeiro.nome}</h2>
 
-          <p style={{color:"#D4AF37"}}>
-            {"⭐".repeat(Math.floor(selectedBarber.rating))}
-          </p>
-
-          <p style={{color:"#aaa"}}>
-            Corte • Barba • Sobrancelha
+          <p>
+          ⭐ {barbeiro.rating}  
+          ({barbeiro.avaliacoes} avaliações)
           </p>
 
           <button
-            onClick={() => window.location.href="/perfil"}
-            style={{
-              width:"100%",
-              marginTop:"10px",
-              padding:"14px",
-              borderRadius:"10px",
-              border:"none",
-              background:"#D4AF37",
-              fontWeight:"bold"
-            }}
+          style={{
+            background:"#fff",
+            color:"#000",
+            border:"none",
+            padding:"12px",
+            width:"100%",
+            borderRadius:"10px",
+            marginTop:"10px",
+            fontWeight:"bold"
+          }}
+          onClick={()=>alert("Abrir perfil do barbeiro")}
           >
-            VER PERFIL
-          </button>
-
-          <button
-            onClick={() => window.location.href="/pagamento"}
-            style={{
-              width:"100%",
-              marginTop:"10px",
-              padding:"14px",
-              borderRadius:"10px",
-              border:"none",
-              background:"#fff",
-              fontWeight:"bold"
-            }}
-          >
-            CHAMAR BARBEIRO
+          VER BARBEIRO
           </button>
 
         </div>
+
       )}
 
-      <div style={{
-        position:"absolute",
-        bottom:0,
-        left:0,
-        right:0,
-        background:"#000",
-        display:"flex",
-        justifyContent:"space-around",
-        padding:"10px",
-        borderTop:"1px solid #333"
-      }}>
-        <span style={{color:"#D4AF37"}}>🏠 Início</span>
-        <span style={{color:"#fff"}}>📅 Agenda</span>
-        <span style={{color:"#fff"}}>💰 Ganhos</span>
-        <span style={{color:"#fff"}}>☰ Menu</span>
-      </div>
-
     </div>
-  );
-};
-
-export default Mapa;
+  )
+}
