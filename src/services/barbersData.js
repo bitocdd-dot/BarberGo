@@ -1,39 +1,43 @@
 const barbers = [
   {
     id: 1,
-    name: "Barbeiro João",
-    address: "Copacabana, Rio de Janeiro",
+    name: "João Barbeiro",
+    photo: "https://images.unsplash.com/photo-1622253692010-333de7571860",
     lat: -22.9718,
     lng: -43.1868,
     rating: 4.5,
-    services: ["Corte", "Barba", "Tintura"]
+    services: ["Corte", "Barba", "Tintura"],
+    available: true
   },
   {
     id: 2,
-    name: "Barbeiro Maria",
-    address: "Ipanema, Rio de Janeiro",
+    name: "Carlos Fade",
+    photo: "https://images.unsplash.com/photo-1611604548018-d56bba161d71",
     lat: -22.9837,
     lng: -43.2075,
     rating: 4.8,
-    services: ["Corte Feminino", "Barba", "Hidratação"]
+    services: ["Corte Feminino", "Barba", "Hidratação"],
+    available: true
   },
   {
     id: 3,
-    name: "Barbeiro Pedro",
-    address: "Centro, Rio de Janeiro",
+    name: "Marcos Style",
+    photo: "https://images.unsplash.com/photo-1583417319070-4e4615d91814",
     lat: -22.9068,
     lng: -43.1729,
-    rating: 4.2,
-    services: ["Corte Clássico", "Barba", "Massagem"]
+    rating: 4.8,
+    services: ["Corte", "Barba", "Sobrancelha"],
+    available: false
   },
   {
     id: 4,
-    name: "Barbeiro Lucas",
-    address: "Duque de Caxias (perto de você)",
+    name: "Lucas",
+    photo: "https://images.unsplash.com/photo-1622287162716-f311baa1a2b8",
     lat: -22.7856,
     lng: -43.3117,
     rating: 4.7,
-    services: ["Corte Degradê", "Sobrancelha", "Barba"]
+    services: ["Corte Degradê", "Sobrancelha", "Barba"],
+    available: true
   }
 ];
 
