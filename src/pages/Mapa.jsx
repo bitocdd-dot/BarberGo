@@ -16,7 +16,12 @@ const barbeiros = [
     lng:-43.273,
     rating:4.9,
     avaliacoes:120,
-    descricao:"Especialista em fade, barba e corte social."
+    descricao:"Especialista em fade, barba e corte social.",
+    fotos:[
+      "https://images.unsplash.com/photo-1621605815971-fbc98d665033",
+      "https://images.unsplash.com/photo-1599351431202-1e0f0137899a",
+      "https://images.unsplash.com/photo-1622287162716-4a63e6d7b9b3"
+    ]
   },
   {
     id:2,
@@ -25,7 +30,12 @@ const barbeiros = [
     lng:-43.270,
     rating:4.8,
     avaliacoes:98,
-    descricao:"Corte moderno, navalhado e barba completa."
+    descricao:"Corte moderno, navalhado e barba completa.",
+    fotos:[
+      "https://images.unsplash.com/photo-1585747860715-2ba37e788b70",
+      "https://images.unsplash.com/photo-1593702288056-f34b0d0d7c0c",
+      "https://images.unsplash.com/photo-1605497788044-5a32c7078486"
+    ]
   }
 ]
 
@@ -79,8 +89,7 @@ export default function Mapa(){
           <h2>{barbeiro.nome}</h2>
 
           <p>
-          ⭐ {barbeiro.rating}  
-          ({barbeiro.avaliacoes} avaliações)
+          ⭐ {barbeiro.rating} ({barbeiro.avaliacoes} avaliações)
           </p>
 
           <button
@@ -114,6 +123,7 @@ export default function Mapa(){
           background:"#111",
           color:"#fff",
           padding:"25px",
+          overflow:"scroll",
           zIndex:10000
         }}>
 
@@ -124,6 +134,28 @@ export default function Mapa(){
           <p style={{marginTop:"20px"}}>
           {barbeiro.descricao}
           </p>
+
+          <h3 style={{marginTop:"30px"}}>Portfólio</h3>
+
+          <div style={{
+            display:"grid",
+            gridTemplateColumns:"1fr 1fr",
+            gap:"10px",
+            marginTop:"10px"
+          }}>
+
+          {barbeiro.fotos.map((foto,i)=>(
+            <img
+              key={i}
+              src={foto}
+              style={{
+                width:"100%",
+                borderRadius:"10px"
+              }}
+            />
+          ))}
+
+          </div>
 
           <button
           style={{
