@@ -114,13 +114,11 @@ const Mapa = () => {
     return (R * c).toFixed(1);
   };
 
-  const handleVerPerfil = (barberId) => {
+  const handleMarkerClick = (barberId) => {
     if (mapRef.current) {
-      mapRef.current.closePopup(); // Fecha popup pra não travar
+      mapRef.current.closePopup(); // Fecha qualquer popup aberto
     }
-    setTimeout(() => {
-      window.location.href = `/perfil?barberId=${barberId}`;
-    }, 100); // Delay pra garantir que o popup feche
+    window.location.href = `/perfil?barberId=${barberId}`;
   };
 
   if (loading) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff'}}>Carregando mapa...</div>;
@@ -154,6 +152,9 @@ const Mapa = () => {
             key={barber.id}
             position={[barber.lat, barber.lng]}
             icon={barber.available ? availableIcon : occupiedIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick(barber.id),
+            }}
           >
             <Popup closeButton={true} autoPan={true} autoPanPadding={[50, 50]}>
               <div style={{ minWidth: '220px', textAlign: 'center', padding: '10px' }}>
@@ -164,27 +165,9 @@ const Mapa = () => {
                 <p style={{ color: barber.available ? 'lime' : 'red', fontWeight: 'bold' }}>
                   {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
                 </p>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    handleVerPerfil(barber.id);
-                  }}
-                  style={{
-                    background: '#D4AF37',
-                    color: 'black',
-                    border: 'none',
-                    padding: '12px 24px',
-                    borderRadius: '30px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                    width: '100%',
-                    fontSize: '16px',
-                  }}
-                >
-                  Ver Perfil
-                </button>
+                <p style={{ marginTop: '15px', color: '#888', fontSize: '14px' }}>
+                  Clique no marker pra ver perfil
+                </p>
               </div>
             </Popup>
           </Marker>
