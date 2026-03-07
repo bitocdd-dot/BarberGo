@@ -1,6 +1,12 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import { MapContainer, TileLayer, Marker } from "react-leaflet"
+import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { useState } from "react"
+
+const barbeiroIcon = new L.Icon({
+  iconUrl:"https://cdn-icons-png.flaticon.com/512/921/921347.png",
+  iconSize:[35,35]
+})
 
 const barbeiros = [
   {
@@ -43,6 +49,7 @@ export default function Mapa(){
           <Marker
             key={b.id}
             position={[b.lat,b.lng]}
+            icon={barbeiroIcon}
             eventHandlers={{
               click:()=>setBarbeiro(b)
             }}
@@ -84,9 +91,8 @@ export default function Mapa(){
             marginTop:"10px",
             fontWeight:"bold"
           }}
-          onClick={()=>alert("Abrir perfil do barbeiro")}
           >
-          VER BARBEIRO
+          VER PERFIL
           </button>
 
         </div>
