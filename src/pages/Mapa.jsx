@@ -1,68 +1,28 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+// Mapa.jsx
 import { useEffect, useState } from "react";
-import { supabase } from "../services/supabase";
+import { supabase } from "../lib/supabaseClient";
 
-function Mapa(){
+export default function Mapa() {
+  const [barbeiros, setBarbeiros] = useState([]);
 
-const [barbers,setBarbers] = useState([])
-const [userLocation,setUserLocation] = useState(null)
+  useEffect(() => {
+    const fetchBarbeiros = async () => {
+      const { data, error } = await supabase.from("barbers").select("*");
+      if (error) console.log(error);
+      else setBarbeiros(data);
+    };
+    fetchBarbeiros();
+  }, []);
 
-useEffect(()=>{
-
-navigator.geolocation.getCurrentPosition((pos)=>{
-
-setUserLocation([
-pos.coords.latitude,
-pos.coords.longitude
-])
-
-})
-
-loadBarbers()
-
-},[])
-
-async function loadBarbers(){
-
-const { data } = await supabase
-.from("barbers")
-.select("*")
-
-setBarbers(data)
-
+  return (
+    <div>
+      <h2>Mapa de Barbeiros</h2>
+      {barbeiros.length === 0 && <p>Nenhum barbeiro cadastrado ainda.</p>}
+      {barbeiros.map((b) => (
+        <div key={b.id}>
+          {b.nome} - {b.lat}, {b.lng} ⭐ {b.avaliacao}
+        </div>
+      ))}
+    </div>
+  );
 }
-
-if(!userLocation){
-return <h2>Carregando mapa...</h2>
-}
-
-return(
-
-<MapContainer center={userLocation} zoom={15} style={{height:"100vh"}}>
-
-<TileLayer
-url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-/>
-
-<Marker position={userLocation}>
-<Popup>Você está aqui</Popup>
-</Marker>
-
-{barbers.map((b)=>(
-<Marker key={b.id} position={[b.lat,b.lng]}>
-<Popup>
-💈 {b.nome}
-<br/>
-⭐ {b.rating}
-</Popup>
-</Marker>
-))}
-
-</MapContainer>
-
-)
-
-}
-
-export default Mapa
