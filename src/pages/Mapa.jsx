@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -51,16 +51,7 @@ const Mapa = () => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#000",
-          color: "#fff",
-        }}
-      >
+      <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#000",color:"#fff"}}>
         Carregando mapa...
       </div>
     );
@@ -68,57 +59,44 @@ const Mapa = () => {
 
   if (!userPos) {
     return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#000",
-          color: "red",
-        }}
-      >
+      <div style={{height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#000",color:"red"}}>
         Ative o GPS
       </div>
     );
   }
 
   return (
-    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
+    <div style={{ height: "100vh", width: "100%", position: "relative", background:"#000" }}>
 
       {/* HEADER */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          background: "#000",
-          padding: "12px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <h1 style={{ color: "#D4AF37", margin: 0 }}>BarberGo</h1>
-        <span style={{ color: "#fff" }}>Suporte</span>
+      <div style={{
+        position:"absolute",
+        top:0,
+        left:0,
+        right:0,
+        zIndex:1000,
+        background:"#000",
+        padding:"12px",
+        display:"flex",
+        justifyContent:"space-between"
+      }}>
+        <h1 style={{color:"#D4AF37",margin:0}}>BarberGo</h1>
+        <span style={{color:"#fff"}}>Suporte</span>
       </div>
 
       {/* BANNER */}
-      <div
-        style={{
-          position: "absolute",
-          top: "55px",
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          background: "#D4AF37",
-          padding: "10px",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
-      >
-        8 clientes procurando barbeiro agora
+      <div style={{
+        position:"absolute",
+        top:"55px",
+        left:0,
+        right:0,
+        zIndex:1000,
+        background:"#D4AF37",
+        padding:"10px",
+        textAlign:"center",
+        fontWeight:"bold"
+      }}>
+        🔥 8 clientes procurando barbeiro agora
       </div>
 
       {/* MAPA */}
@@ -127,6 +105,7 @@ const Mapa = () => {
         zoom={14}
         style={{ height: "100%", width: "100%" }}
       >
+
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         <Marker position={[userPos.lat, userPos.lng]} icon={userIcon} />
@@ -144,75 +123,89 @@ const Mapa = () => {
             position={[barber.lat, barber.lng]}
             icon={barberIcon}
             eventHandlers={{
-              click: () => {
-                setSelectedBarber(barber);
-              },
+              click: () => setSelectedBarber(barber)
             }}
-          >
-            <Popup>
-              <b>{barber.name}</b>
-              <br />
-              ⭐ {barber.rating}
-            </Popup>
-          </Marker>
+          />
         ))}
+
       </MapContainer>
 
       {/* CARD DO BARBEIRO */}
       {selectedBarber && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "70px",
-            left: 0,
-            right: 0,
-            background: "#000",
-            padding: "15px",
-            borderTopLeftRadius: "20px",
-            borderTopRightRadius: "20px",
-          }}
-        >
-          <h3 style={{ color: "#fff" }}>{selectedBarber.name}</h3>
+        <div style={{
+          position:"absolute",
+          bottom:"70px",
+          left:0,
+          right:0,
+          background:"#000",
+          padding:"15px",
+          borderTopLeftRadius:"20px",
+          borderTopRightRadius:"20px"
+        }}>
 
-          <p style={{ color: "#D4AF37" }}>
+          <h3 style={{color:"#fff",margin:0}}>
+            {selectedBarber.name}
+          </h3>
+
+          <p style={{color:"#D4AF37"}}>
             {"⭐".repeat(Math.floor(selectedBarber.rating))}
           </p>
 
+          <p style={{color:"#aaa"}}>
+            Corte • Barba • Sobrancelha
+          </p>
+
           <button
-            onClick={() => (window.location.href = "/pagamento")}
+            onClick={() => window.location.href="/perfil"}
             style={{
-              width: "100%",
-              padding: "14px",
-              borderRadius: "10px",
-              border: "none",
-              background: "#D4AF37",
-              fontWeight: "bold",
+              width:"100%",
+              marginTop:"10px",
+              padding:"14px",
+              borderRadius:"10px",
+              border:"none",
+              background:"#D4AF37",
+              fontWeight:"bold"
+            }}
+          >
+            VER PERFIL DO BARBEIRO
+          </button>
+
+          <button
+            onClick={() => window.location.href="/pagamento"}
+            style={{
+              width:"100%",
+              marginTop:"10px",
+              padding:"14px",
+              borderRadius:"10px",
+              border:"none",
+              background:"#fff",
+              fontWeight:"bold"
             }}
           >
             CHAMAR BARBEIRO
           </button>
+
         </div>
       )}
 
       {/* MENU */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: "#000",
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "10px",
-          borderTop: "1px solid #333",
-        }}
-      >
-        <span style={{ color: "#D4AF37" }}>🏠 Início</span>
-        <span style={{ color: "#fff" }}>📅 Agenda</span>
-        <span style={{ color: "#fff" }}>💰 Ganhos</span>
-        <span style={{ color: "#fff" }}>☰ Menu</span>
+      <div style={{
+        position:"absolute",
+        bottom:0,
+        left:0,
+        right:0,
+        background:"#000",
+        display:"flex",
+        justifyContent:"space-around",
+        padding:"10px",
+        borderTop:"1px solid #333"
+      }}>
+        <span style={{color:"#D4AF37"}}>🏠 Início</span>
+        <span style={{color:"#fff"}}>📅 Agenda</span>
+        <span style={{color:"#fff"}}>💰 Ganhos</span>
+        <span style={{color:"#fff"}}>☰ Menu</span>
       </div>
+
     </div>
   );
 };
