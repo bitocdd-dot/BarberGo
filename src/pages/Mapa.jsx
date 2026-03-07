@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
@@ -17,162 +17,112 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Ícones
-const userIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
+// Função pra criar balão custom com foto e nome
+const createBubbleIcon = (barber) => {
+  const html = `
+    <div style="text-align: center; background: black; border-radius: 20px; padding: 5px; color: white; font-size: 12px; width: 100px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+      <img src="${barber.photo || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid gold;" />
+      <p style="margin: 0; font-weight: bold;">${barber.name}</p>
+      <p style="margin: 0; font-size: 10px;">⭐ ${barber.rating}</p>
+    </div>
+  `;
 
-const availableIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
-
-const occupiedIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
-
-const RecenterControl = ({ position }) => {
-  const map = useMap();
-  useEffect(() => {
-    const controlDiv = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-    controlDiv.style.background = 'white';
-    controlDiv.style.border = '2px solid rgba(0,0,0,0.2)';
-    controlDiv.style.borderRadius = '4px';
-    controlDiv.style.cursor = 'pointer';
-    controlDiv.style.padding = '5px';
-    controlDiv.innerHTML = '📍';
-    controlDiv.title = 'Minha localização';
-    controlDiv.onclick = () => map.setView(position, 13);
-    map.getContainer().appendChild(controlDiv);
-    return () => map.getContainer().removeChild(controlDiv);
-  }, [map, position]);
-  return null;
+  return L.divIcon({
+    className: "custom-bubble",
+    html,
+    iconSize: [100, 70],
+    iconAnchor: [50, 70],
+    popupAnchor: [0, -70],
+  });
 };
 
 const Mapa = () => {
   const [userPos, setUserPos] = useState(null);
-  const [nearby, setNearby] = useState([]);
+  const [selectedBarber, setSelectedBarber] = useState(null);
   const [loading, setLoading] = useState(true);
-  const mapRef = useRef(null);
 
   useEffect(() => {
-    let unsubscribeWatch;
-
     const load = async () => {
       try {
         const pos = await getCurrentLocation();
         setUserPos(pos);
-
-        const updated = barbers.map(b => ({
-          ...b,
-          available: b.id % 2 === 1,
-          distance: getDistance(pos.lat, pos.lng, b.lat, b.lng),
-        }));
-        setNearby(updated);
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
 
-      unsubscribeWatch = watchLocation((newPos) => {
+      watchLocation((newPos) => {
         setUserPos(newPos);
-        const updated = barbers.map(b => ({
-          ...b,
-          available: b.id % 2 === 1,
-          distance: getDistance(newPos.lat, newPos.lng, b.lat, b.lng),
-        }));
-        setNearby(updated);
       });
     };
 
     load();
 
-    return () => {
-      if (unsubscribeWatch) unsubscribeWatch();
-      stopWatching();
-    };
+    return () => stopWatching();
   }, []);
 
-  const getDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2)**2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return (R * c).toFixed(1);
-  };
+  if (loading) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', background: '#000'}}>Carregando mapa BarberGo...</div>;
 
-  const handleMarkerClick = (barberId) => {
-    if (mapRef.current) {
-      mapRef.current.closePopup(); // Fecha qualquer popup aberto
-    }
-    window.location.href = `/perfil?barberId=${barberId}`;
-  };
-
-  if (loading) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff'}}>Carregando mapa...</div>;
-
-  if (!userPos) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: 'red'}}>Erro na localização. Ative GPS.</div>;
+  if (!userPos) return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'red', background: '#000'}}>Ative GPS.</div>;
 
   return (
-    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
-      <MapContainer
-        center={[userPos.lat, userPos.lng]}
-        zoom={12}
-        style={{ height: "100%", width: "100%" }}
-        zoomControl={false}
-        whenCreated={(mapInstance) => { mapRef.current = mapInstance; }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap'
-        />
+    <div style={{ height: "100vh", width: "100%", position: "relative", background: "#000" }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 1000, background: "#000", padding: "10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1 style={{ color: "#D4AF37", fontSize: "24px", margin: 0 }}>BarberGo</h1>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img src="https://via.placeholder.com/30" alt="user" style={{ borderRadius: "50%", marginRight: "10px" }} />
+          <span style={{ fontSize: "24px" }}>🎧 Suporte</span>
+        </div>
+      </div>
 
-        <RecenterControl position={[userPos.lat, userPos.lng]} />
+      <div style={{ position: "absolute", top: "50px", left: 0, right: 0, zIndex: 1000, background: "#D4AF37", color: "#000", padding: "10px", textAlign: "center", fontWeight: "bold" }}>
+        🔥 8 clientes em busca de barbeiro agora →
+      </div>
+
+      <MapContainer center={[userPos.lat, userPos.lng]} zoom={14} style={{ height: "calc(100% - 150px)", width: "100%", marginTop: "90px" }}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         <Marker position={[userPos.lat, userPos.lng]} icon={userIcon}>
           <Popup>Você está aqui</Popup>
         </Marker>
 
-        <Circle center={[userPos.lat, userPos.lng]} radius={5000} color="#3388ff" fillColor="#3388ff" fillOpacity={0.1} />
+        <Circle center={[userPos.lat, userPos.lng]} radius={500} color="#136AEC" fillColor="#136AEC" fillOpacity={0.2} />
 
-        {nearby.map(barber => (
+        {barbers.map(barber => (
           <Marker
             key={barber.id}
             position={[barber.lat, barber.lng]}
-            icon={barber.available ? availableIcon : occupiedIcon}
+            icon={createBubbleIcon(barber)}
             eventHandlers={{
-              click: () => handleMarkerClick(barber.id),
+              click: () => setSelectedBarber(barber),
             }}
-          >
-            <Popup closeButton={true} autoPan={true} autoPanPadding={[50, 50]}>
-              <div style={{ minWidth: '220px', textAlign: 'center', padding: '10px' }}>
-                <h3 style={{ margin: '0 0 8px', color: '#D4AF37' }}>{barber.name}</h3>
-                <p style={{ margin: '5px 0' }}>⭐ {barber.rating}</p>
-                <p style={{ margin: '5px 0', fontSize: '14px' }}>{barber.services.join(' • ')}</p>
-                <p style={{ margin: '5px 0', color: '#aaa' }}>{barber.distance} km</p>
-                <p style={{ color: barber.available ? 'lime' : 'red', fontWeight: 'bold' }}>
-                  {barber.available ? '🟢 Disponível' : '🔴 Ocupado'}
-                </p>
-                <p style={{ marginTop: '15px', color: '#888', fontSize: '14px' }}>
-                  Clique no marker pra ver perfil
-                </p>
-              </div>
-            </Popup>
-          </Marker>
+          />
         ))}
       </MapContainer>
+
+      {selectedBarber && (
+        <div style={{ position: "absolute", bottom: "60px", left: 0, right: 0, background: "#000", padding: "15px", borderTopLeftRadius: "20px", borderTopRightRadius: "20px", boxShadow: "0 -2px 10px rgba(0,0,0,0.5)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <img src={selectedBarber.photo || "https://via.placeholder.com/80"} alt={selectedBarber.name} style={{ width: "80px", height: "100px", borderRadius: "12px", objectFit: "cover" }} />
+            <div>
+              <h3 style={{ color: "#D4AF37", margin: 0 }}>{selectedBarber.name}</h3>
+              <p style={{ color: "#fff", margin: "5px 0" }}>⭐⭐⭐⭐⭐ {selectedBarber.rating}</p>
+              <p style={{ color: "#aaa", margin: 0 }}>Corte • Barba • Sobrancelha</p>
+            </div>
+          </div>
+          <button onClick={() => window.location.href = "/pagamento"} style={{ width: "100%", background: "#D4AF37", color: "#000", border: "none", padding: "15px", borderRadius: "12px", fontWeight: "bold", marginTop: "15px" }}>
+            CHAMAR BARBEIRO
+          </button>
+        </div>
+      )}
+
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#000", display: "flex", justifyContent: "space-around", padding: "10px 0", borderTop: "1px solid #333" }}>
+        <div style={{ textAlign: "center", color: "#D4AF37" }}>🏠 Início</div>
+        <div style={{ textAlign: "center", color: "#fff" }}>📅 Agenda</div>
+        <div style={{ textAlign: "center", color: "#fff" }}>💰 Ganhos</div>
+        <div style={{ textAlign: "center", color: "#fff" }}>☰ Menu</div>
+      </div>
     </div>
   );
 };
