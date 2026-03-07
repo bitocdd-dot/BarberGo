@@ -1,5 +1,6 @@
+// cadastroBarbeiro.jsx
 import { useState } from "react";
-import { supabase } from "../lib/supabaseClient"; // certifique-se que o cliente Supabase está configurado
+import { supabase } from "../lib/supabaseClient";
 
 export default function CadastroBarbeiro() {
   const [nome, setNome] = useState("");
@@ -14,9 +15,8 @@ export default function CadastroBarbeiro() {
       .from("barbers")
       .insert([{ nome, lat: parseFloat(lat), lng: parseFloat(lng), avaliacao }]);
 
-    if (error) {
-      alert("Erro ao cadastrar barbeiro: " + error.message);
-    } else {
+    if (error) alert("Erro ao cadastrar barbeiro: " + error.message);
+    else {
       alert("Barbeiro cadastrado com sucesso!");
       setNome("");
       setLat("");
