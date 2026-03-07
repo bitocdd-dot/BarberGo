@@ -13,7 +13,7 @@ iconUrl:"https://cdn-icons-png.flaticon.com/512/1828/1828843.png",
 iconSize:[35,35]
 })
 
-const barbeiros = [
+const barbeiros=[
 
 {
 id:1,
@@ -26,8 +26,7 @@ status:"online",
 descricao:"Especialista em fade e barba.",
 fotos:[
 "https://images.unsplash.com/photo-1621605815971-fbc98d665033",
-"https://images.unsplash.com/photo-1599351431202-1e0f0137899a",
-"https://images.unsplash.com/photo-1622287162716-4a63e6d7b9b3"
+"https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
 ]
 },
 
@@ -42,8 +41,7 @@ status:"ocupado",
 descricao:"Cortes modernos e barba completa.",
 fotos:[
 "https://images.unsplash.com/photo-1585747860715-2ba37e788b70",
-"https://images.unsplash.com/photo-1593702288056-f34b0d0d7c0c",
-"https://images.unsplash.com/photo-1605497788044-5a32c7078486"
+"https://images.unsplash.com/photo-1593702288056-f34b0d0d7c0c"
 ]
 }
 
@@ -51,9 +49,9 @@ fotos:[
 
 export default function Mapa(){
 
-const [barbeiro,setBarbeiro] = useState(null)
-const [perfil,setPerfil] = useState(false)
-const [pedido,setPedido] = useState(false)
+const[barbeiro,setBarbeiro]=useState(null)
+const[perfil,setPerfil]=useState(false)
+const[pedido,setPedido]=useState(false)
 
 return(
 
@@ -71,7 +69,7 @@ style={{height:"100%",width:"100%"}}
 
 if(b.status==="offline") return null
 
-const icon = b.status==="ocupado" ? iconOcupado : iconOnline
+const icon=b.status==="ocupado"?iconOcupado:iconOnline
 
 return(
 
@@ -94,7 +92,7 @@ click:()=>setBarbeiro(b)
 
 <div style={{
 position:"absolute",
-bottom:"0",
+bottom:"70px",
 left:"0",
 right:"0",
 background:"#000",
@@ -108,11 +106,7 @@ zIndex:9999
 <h2>{barbeiro.nome}</h2>
 
 <p>
-⭐ {barbeiro.rating} ({barbeiro.avaliacoes} avaliações)
-</p>
-
-<p>
-Status: {barbeiro.status==="ocupado" ? "🟡 Ocupado" : "🟢 Online"}
+⭐ {barbeiro.rating} ({barbeiro.avaliacoes})
 </p>
 
 <button
@@ -152,11 +146,9 @@ zIndex:10000
 
 <h1>{barbeiro.nome}</h1>
 
-<p>⭐ {barbeiro.rating} ({barbeiro.avaliacoes} avaliações)</p>
+<p>⭐ {barbeiro.rating} ({barbeiro.avaliacoes})</p>
 
-<p style={{marginTop:"20px"}}>
-{barbeiro.descricao}
-</p>
+<p style={{marginTop:"20px"}}>{barbeiro.descricao}</p>
 
 <h3 style={{marginTop:"30px"}}>Portfólio</h3>
 
@@ -167,15 +159,8 @@ gap:"10px",
 marginTop:"10px"
 }}>
 
-{barbeiro.fotos.map((foto,i)=>(
-<img
-key={i}
-src={foto}
-style={{
-width:"100%",
-borderRadius:"10px"
-}}
-/>
+{barbeiro.fotos.map((f,i)=>(
+<img key={i} src={f} style={{width:"100%",borderRadius:"10px"}}/>
 ))}
 
 </div>
@@ -196,26 +181,11 @@ onClick={()=>setPedido(true)}
 CHAMAR BARBEIRO
 </button>
 
-<button
-style={{
-marginTop:"10px",
-background:"transparent",
-color:"#fff",
-padding:"10px",
-border:"1px solid #fff",
-borderRadius:"10px",
-width:"100%"
-}}
-onClick={()=>setPerfil(false)}
->
-VOLTAR
-</button>
-
 </div>
 
 )}
 
-{pedido && barbeiro &&(
+{pedido &&(
 
 <div style={{
 position:"absolute",
@@ -232,27 +202,34 @@ zIndex:11000
 <h1>Pedido enviado</h1>
 
 <p style={{marginTop:"20px"}}>
-Aguardando {barbeiro.nome} aceitar o serviço.
+Aguardando barbeiro aceitar.
 </p>
-
-<button
-style={{
-marginTop:"30px",
-background:"#fff",
-color:"#000",
-padding:"12px",
-border:"none",
-borderRadius:"10px",
-width:"100%",
-fontWeight:"bold"
-}}
->
-CANCELAR PEDIDO
-</button>
 
 </div>
 
 )}
+
+<div style={{
+position:"absolute",
+bottom:"0",
+left:"0",
+right:"0",
+height:"70px",
+background:"#000",
+display:"flex",
+justifyContent:"space-around",
+alignItems:"center",
+color:"#fff",
+zIndex:12000
+}}>
+
+<div>🏠</div>
+<div>🗺️</div>
+<div>📅</div>
+<div>👤</div>
+<div>💬</div>
+
+</div>
 
 </div>
 
