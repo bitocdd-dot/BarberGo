@@ -1,8 +1,9 @@
 import Home from "./pages/Home";
 
-function App() {
-  return <Home />;
+export default function App() {
+  return (
+    <div>
+      <Home />
+    </div>
+  );
 }
-
-export default App;
-// update deploy
