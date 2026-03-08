@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 
 export default function Home() {
   return (
-    <div style={{ padding: "10px", textAlign: "center" }}>
+    <div style={{ padding:"10px", textAlign:"center" }}>
       <h1>BarberGo</h1>
       <CadastroBarbeiro />
       <Mapa />
