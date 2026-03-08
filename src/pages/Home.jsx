@@ -1,6 +1,6 @@
-import CadastroBarbeiro from "./cadastroBarbeiro"; // deve estar na mesma pasta
-import Mapa from "./Mapa"; // deve estar na mesma pasta
-import "../node_modules/leaflet/dist/leaflet.css"; // garante que o mapa funciona
+import CadastroBarbeiro from "./cadastroBarbeiro";
+import Mapa from "./Mapa";
+import "leaflet/dist/leaflet.css";
 
 export default function Home() {
   return (
