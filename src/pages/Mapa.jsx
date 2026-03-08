@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { supabase } from "../lib/supabaseClient.js";
+import { supabase } from "../services/supabase.js";
 
 const barberIcon = new L.Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/3081/3081682.png",
@@ -16,10 +16,12 @@ export default function Mapa() {
 
   useEffect(() => {
     const carregarBarbeiros = async () => {
-      const { data, error } = await supabase.from("barbers").select("*");
+      const { data, error } = await supabase
+        .from("barbers")
+        .select("*");
 
       if (error) {
-        console.log(error);
+        console.log("Erro ao buscar barbeiros:", error);
       } else {
         setBarbeiros(data || []);
       }
@@ -41,7 +43,7 @@ export default function Mapa() {
             <Popup>
               <strong>{b.nome}</strong>
               <br />
-              Avaliação: {b.avaliacao} ⭐
+              Avaliação: {b.rating} ⭐
             </Popup>
           </Marker>
         ))}
