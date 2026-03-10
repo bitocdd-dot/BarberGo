@@ -19,14 +19,19 @@ const userIcon = new L.Icon({
 });
 
 export default function Mapa() {
-  const [barbeiros, setBarbeiros] = useState([]);
+  const [barbers, setBarbers] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
     const carregar = async () => {
+      // BUSCANDO A TABELA CORRETA: "barbers"
       const { data, error } = await supabase.from("barbers").select("*");
 
-      if (!error) setBarbeiros(data);
+      if (error) {
+        console.log("Erro ao buscar barbers:", error);
+      } else {
+        setBarbers(data);
+      }
     };
 
     carregar();
@@ -56,11 +61,11 @@ export default function Mapa() {
           </Marker>
         )}
 
-        {barbeiros.map((b) => (
+        {barbers.map((b) => (
           <Marker key={b.id} position={[b.lat, b.lng]} icon={barberIcon}>
             <Popup>
-              <strong>{b.nome}</strong> <br />
-              Avaliação: {b.rating} ⭐ <br />
+              <strong>{b.name}</strong> <br />
+              Avaliação: {b.rating ?? "Sem avaliações"} ⭐ <br />
               Barbeiro disponível 💈
             </Popup>
           </Marker>
