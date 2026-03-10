@@ -24,7 +24,6 @@ export default function Mapa() {
 
   useEffect(() => {
     const carregar = async () => {
-      // BUSCANDO A TABELA CORRETA: "barbers"
       const { data, error } = await supabase.from("barbers").select("*");
 
       if (error) {
