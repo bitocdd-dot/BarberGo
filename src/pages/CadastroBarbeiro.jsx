@@ -13,7 +13,6 @@ export default function CadastroBarbeiro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { data, error } = await supabase.from("barbers").insert([
       {
         name,
@@ -29,61 +28,21 @@ export default function CadastroBarbeiro() {
       alert("Erro ao cadastrar barbeiro: " + error.message);
     } else {
       alert("Barbeiro cadastrado com sucesso!");
-      navigate("/Mapa"); // redireciona para o mapa
+      navigate("/Mapa");
     }
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h2>Cadastro de Barbeiro</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Telefone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Latitude"
-          value={lat}
-          onChange={(e) => setLat(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Longitude"
-          value={lng}
-          onChange={(e) => setLng(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Rating (1-5)"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          required
-          min="1"
-          max="5"
-        />
-        <button type="submit" style={{ marginTop: "10px", padding: "10px 20px" }}>
-          Cadastrar
-        </button>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <input type="text" placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="text" placeholder="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+        <input type="number" placeholder="Latitude" value={lat} onChange={(e) => setLat(e.target.value)} required />
+        <input type="number" placeholder="Longitude" value={lng} onChange={(e) => setLng(e.target.value)} required />
+        <input type="number" placeholder="Rating (1-5)" value={rating} onChange={(e) => setRating(e.target.value)} required min="1" max="5" />
+        <button type="submit" style={{ padding: "10px 20px" }}>Cadastrar</button>
       </form>
     </div>
   );
