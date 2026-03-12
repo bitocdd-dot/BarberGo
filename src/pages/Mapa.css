@@ -1,40 +1,9 @@
 .map-container {
   height: 100vh;
   width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 .mapa {
   height: 100%;
-  width: 100%;
-}
-
-.popup-card {
-  width: 200px;
-}
-
-.card {
-  font-family: Arial;
-  text-align: center;
-}
-
-.card h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.card p {
-  margin: 4px 0;
-}
-
-.btn {
-  margin-top: 8px;
-  padding: 6px 10px;
-  background-color: #000;
-  color: #fff;
-  border-radius: 6px;
-  border: none;
   width: 100%;
 }
