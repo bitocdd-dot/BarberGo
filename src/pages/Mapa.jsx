@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../services/supabase";
-import "./Mapa.css"; // Arquivo CSS que vamos criar
+import "./Mapa.css"; // arquivo de estilo
 
 // Ícone do barbeiro
 const barberIcon = new L.Icon({
@@ -51,14 +51,14 @@ export default function Mapa() {
           attribution="&copy; OpenStreetMap"
         />
 
-        {/* Usuário */}
+        {/* Marcador do usuário */}
         {userLocation && (
           <Marker position={userLocation} icon={userIcon}>
             <Popup className="popup-user">Você está aqui 📍</Popup>
           </Marker>
         )}
 
-        {/* Barbeiros */}
+        {/* Lista de barbeiros */}
         {barbers.map((b) => (
           <Marker key={b.id} position={[Number(b.lat), Number(b.lng)]} icon={barberIcon}>
             <Popup className="popup-card">
