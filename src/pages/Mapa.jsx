@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../services/supabase";
-import "./Mapa.css"; // arquivo de estilo
+import "../pages/mapa.css"; // arquivo de estilo
 
 // Ícone do barbeiro
 const barberIcon = new L.Icon({
