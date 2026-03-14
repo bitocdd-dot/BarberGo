@@ -10,7 +10,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("https://images.unsplash.com/photo-1621605815971-fbc98d665033");
+
+  background-image: url("https://images.unsplash.com/photo-1599351431202-1e0f0137899a");
   background-size: cover;
   background-position: center;
 }
@@ -24,10 +25,10 @@ body {
 }
 
 .logo {
-  font-size: 40px;
+  font-size: 48px;
+  font-family: serif;
   color: #f2b705;
-  margin-bottom: 30px;
-  font-weight: bold;
+  margin-bottom: 25px;
 }
 
 input {
