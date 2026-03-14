@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// IMPORTS CORRIGIDOS
-import Home from "./pages/Home.jsx";
-import CadastroBarbeiro from "./pages/CadastroBarbeiro.jsx";
-import Mapa from "./pages/Mapa.jsx";
+import Home from "./pages/home.jsx";
+import CadastroBarbeiro from "./pages/cadastrobarbeiro.jsx";
+import Mapa from "./pages/mapa.jsx";
 
 import "./index.css";
 
@@ -14,8 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/CadastroBarbeiro" element={<CadastroBarbeiro />} />
-        <Route path="/Mapa" element={<Mapa />} />
+        <Route path="/cadastrobarbeiro" element={<CadastroBarbeiro />} />
+        <Route path="/mapa" element={<Mapa />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
