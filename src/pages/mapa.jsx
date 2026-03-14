@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { supabase } from "../services/supabase";
 import Link from "next/link";
+import { supabase } from "../services/supabase";
 
 const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then(m => m.TileLayer), { ssr: false });
@@ -40,19 +40,9 @@ export default function Mapa() {
           </Marker>
         ))}
       </MapContainer>
-      <div style={{ padding: "10px", color: "#ffd700", fontWeight: "bold" }}>
-        Clientes online: {clientesOnline}
-      </div>
+      <div style={{ padding: "10px", color: "#ffd700", fontWeight: "bold" }}>Clientes online: {clientesOnline}</div>
     </div>
   );
 }
 
-const buttonStyle = {
-  padding: "8px 20px",
-  backgroundColor: "#ffd700",
-  color: "#000",
-  border: "none",
-  borderRadius: "8px",
-  fontWeight: "bold",
-  cursor: "pointer"
-};
+const buttonStyle = { padding: "8px 20px", backgroundColor: "#ffd700", color: "#000", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" };
