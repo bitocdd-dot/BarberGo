@@ -1,25 +1,56 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { supabase } from "../services/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  return (
-    <div style={{ padding: 40, textAlign: "center" }}>
-      <h1>💈 BarberGo</h1>
 
-      <p>Encontre barbeiros próximos de você</p>
+const navigate = useNavigate();
 
-      <div style={{ marginTop: 30 }}>
-        <Link to="/cadastrobarbeiro">
-          <button style={{ padding: 15, margin: 10 }}>
-            Cadastrar Barbeiro
-          </button>
-        </Link>
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
 
-        <Link to="/mapa">
-          <button style={{ padding: 15, margin: 10 }}>
-            Ver Mapa
-          </button>
-        </Link>
-      </div>
-    </div>
-  );
+const login = async () => {
+
+const { error } = await supabase.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+alert("Erro no login");
+}else{
+navigate("/mapa");
+}
+
+};
+
+return(
+
+<div className="login-container">
+
+<div className="login-box">
+
+<div className="logo">BarberGo</div>
+
+<input
+placeholder="E-mail"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
+/>
+
+<input
+type="password"
+placeholder="Senha"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
+/>
+
+<button onClick={login}>ENTRAR</button>
+
+</div>
+
+</div>
+
+);
+
 }
