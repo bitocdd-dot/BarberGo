@@ -1,112 +1,58 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import dynamic from "next/dynamic";
 import { supabase } from "../services/supabase";
-import "leaflet/dist/leaflet.css";
+import Link from "next/link";
 
-export default function Mapa(){
+const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import("react-leaflet").then(m => m.TileLayer), { ssr: false });
+const Marker = dynamic(() => import("react-leaflet").then(m => m.Marker), { ssr: false });
+const Popup = dynamic(() => import("react-leaflet").then(m => m.Popup), { ssr: false });
 
-const [barbers,setBarbers] = useState([]);
-const [userLocation,setUserLocation] = useState(null);
-const [selectedBarber,setSelectedBarber] = useState(null);
+export default function Mapa() {
+  const [barbeiros, setBarbeiros] = useState([]);
+  const [clientesOnline, setClientesOnline] = useState(0);
 
-useEffect(()=>{
+  useEffect(() => {
+    fetchBarbeiros();
+    fetchClientes();
+  }, []);
 
-navigator.geolocation.getCurrentPosition((pos)=>{
+  const fetchBarbeiros = async () => {
+    const { data } = await supabase.from("users").select("*").eq("tipo", "barbeiro");
+    setBarbeiros(data || []);
+  };
 
-setUserLocation([
-pos.coords.latitude,
-pos.coords.longitude
-]);
+  const fetchClientes = async () => {
+    const { data } = await supabase.from("users").select("*").eq("tipo", "cliente");
+    setClientesOnline(data?.length || 0);
+  };
 
-});
-
-loadBarbers();
-
-},[]);
-
-const loadBarbers = async ()=>{
-
-const { data } = await supabase
-.from("barbers")
-.select("*");
-
-if(data){
-setBarbers(data);
+  return (
+    <div style={{ height: "100vh", width: "100%" }}>
+      <MapContainer center={[-22.9129, -43.2003]} zoom={13} style={{ height: "90%", width: "100%" }}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {barbeiros.map(b => (
+          <Marker key={b.id} position={[b.lat || -22.9129, b.lng || -43.2003]}>
+            <Popup>
+              <h3>{b.nome}</h3>
+              <Link href={`/perfilbarbeiro?id=${b.id}`}><button style={buttonStyle}>Ver Perfil</button></Link>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+      <div style={{ padding: "10px", color: "#ffd700", fontWeight: "bold" }}>
+        Clientes online: {clientesOnline}
+      </div>
+    </div>
+  );
 }
 
+const buttonStyle = {
+  padding: "8px 20px",
+  backgroundColor: "#ffd700",
+  color: "#000",
+  border: "none",
+  borderRadius: "8px",
+  fontWeight: "bold",
+  cursor: "pointer"
 };
-
-return(
-
-<div style={{height:"100vh"}}>
-
-<MapContainer
-center={userLocation || [-22.9068,-43.1729]}
-zoom={13}
-style={{height:"100%",width:"100%"}}
->
-
-<TileLayer
-url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-/>
-
-{barbers.map((b)=>(
-
-<Marker
-key={b.id}
-position={[b.lat,b.lng]}
-eventHandlers={{
-click: () => {
-setSelectedBarber(b)
-}
-}}
->
-
-</Marker>
-
-))}
-
-</MapContainer>
-
-{selectedBarber && (
-
-<div style={{
-position:"fixed",
-bottom:"0",
-width:"100%",
-background:"#111",
-padding:"20px",
-borderTopLeftRadius:"20px",
-borderTopRightRadius:"20px",
-boxShadow:"0 -5px 20px rgba(0,0,0,0.5)",
-color:"white"
-}}>
-
-<h2>{selectedBarber.name}</h2>
-
-<p>⭐ {selectedBarber.rating}</p>
-
-<a href={"/perfilbarbeiro/" + selectedBarber.id}>
-
-<button style={{
-width:"100%",
-padding:"15px",
-background:"#f2b705",
-border:"none",
-borderRadius:"10px",
-fontSize:"16px"
-}}>
-VER PERFIL
-</button>
-
-</a>
-
-</div>
-
-)}
-
-</div>
-
-);
-
-}
