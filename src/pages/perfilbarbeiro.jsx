@@ -14,7 +14,7 @@ loadBarber();
 
 },[]);
 
-const loadBarber = async () => {
+const loadBarber = async ()=>{
 
 const { data } = await supabase
 .from("barbers")
@@ -38,19 +38,21 @@ return(
 padding:"20px",
 background:"#111",
 color:"white",
-minHeight:"100vh"
+minHeight:"100vh",
+textAlign:"center"
 }}>
-
-<h1>{barber.name}</h1>
 
 <img
 src={barber.profile_image || "https://i.imgur.com/8Km9tLL.png"}
 style={{
 width:"120px",
 height:"120px",
-borderRadius:"100%"
+borderRadius:"100%",
+marginBottom:"10px"
 }}
 />
+
+<h1>{barber.name}</h1>
 
 <p>⭐ Avaliação: {barber.rating}</p>
 
