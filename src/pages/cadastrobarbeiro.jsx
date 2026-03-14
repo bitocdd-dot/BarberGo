@@ -2,13 +2,15 @@ import { useState } from "react";
 import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
 
-export default function CadastroBarbeiro(){
+export default function CadastroBarbeiro() {
 
 const navigate = useNavigate();
 
 const [name,setName] = useState("");
 const [phone,setPhone] = useState("");
-const [rating,setRating] = useState("5");
+const [email,setEmail] = useState("");
+const [cpf,setCpf] = useState("");
+const [type,setType] = useState("client");
 
 const cadastrar = () => {
 
@@ -21,19 +23,27 @@ const { error } = await supabase
 .from("barbers")
 .insert([
 {
-name: name,
-phone: phone,
-rating: rating,
-lat: lat,
-lng: lng
+name:name,
+phone:phone,
+email:email,
+cpf:cpf,
+type:type,
+rating:5,
+lat:lat,
+lng:lng
 }
 ]);
 
 if(error){
-alert("Erro ao cadastrar barbeiro");
+
+alert("Erro ao cadastrar");
+
 }else{
-alert("Barbeiro cadastrado com sucesso");
+
+alert("Conta criada com sucesso");
+
 navigate("/mapa");
+
 }
 
 });
@@ -42,9 +52,18 @@ navigate("/mapa");
 
 return(
 
-<div style={{padding:"30px"}}>
+<div style={{
+height:"100vh",
+display:"flex",
+flexDirection:"column",
+alignItems:"center",
+justifyContent:"center",
+background:"#111",
+color:"white",
+padding:"20px"
+}}>
 
-<h1>Cadastrar Barbeiro</h1>
+<h1>Cadastro BarberGo</h1>
 
 <input
 placeholder="Nome"
@@ -59,13 +78,41 @@ onChange={(e)=>setPhone(e.target.value)}
 />
 
 <input
-placeholder="Avaliação (1 a 5)"
-value={rating}
-onChange={(e)=>setRating(e.target.value)}
+placeholder="Email"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
 />
 
-<button onClick={cadastrar}>
-Cadastrar usando minha localização
+<input
+placeholder="CPF"
+value={cpf}
+onChange={(e)=>setCpf(e.target.value)}
+/>
+
+<select
+value={type}
+onChange={(e)=>setType(e.target.value)}
+>
+
+<option value="client">Cliente</option>
+<option value="barber">Barbeiro</option>
+
+</select>
+
+<button
+onClick={cadastrar}
+style={{
+marginTop:"20px",
+padding:"15px",
+background:"#f2b705",
+border:"none",
+borderRadius:"10px",
+fontSize:"16px"
+}}
+>
+
+Criar Conta
+
 </button>
 
 </div>
