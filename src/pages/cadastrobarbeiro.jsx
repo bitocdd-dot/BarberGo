@@ -1,149 +1,48 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { supabase } from "../services/supabase";
 
-export default function CadastroBarbeiro(){
+export default function CadastroBarbeiro() {
+  const router = useRouter();
+  const [nome, setNome] = useState("");
+  const [celular, setCelular] = useState("");
+  const [email, setEmail] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [tipo, setTipo] = useState("");
 
-const [name,setName] = useState("");
-const [email,setEmail] = useState("");
-const [phone,setPhone] = useState("");
-const [password,setPassword] = useState("");
-const [accountType,setAccountType] = useState("client");
+  const handleCadastro = async () => {
+    if (!nome || !celular || !email || !cpf || !tipo) return alert("Preencha todos os campos");
 
-const cadastrar = async () => {
+    const { data, error } = await supabase.from("users").insert([{
+      nome, celular, email, cpf, tipo
+    }]);
 
-if(!name || !email || !password){
+    if (error) return alert("Erro ao cadastrar: " + error.message);
 
-alert("Preencha os campos obrigatórios");
+    router.push("/mapa");
+  };
 
-return;
+  return (
+    <div style={{ backgroundColor: "#000", color: "#ffd700", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+      <h1>Cadastro</h1>
+      <input placeholder="Nome completo" value={nome} onChange={e => setNome(e.target.value)} style={inputStyle} />
+      <input placeholder="Número celular" value={celular} onChange={e => setCelular(e.target.value)} style={inputStyle} />
+      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} />
+      <input placeholder="CPF" value={cpf} onChange={e => setCpf(e.target.value)} style={inputStyle} />
 
+      <div style={{ margin: "15px 0" }}>
+        <label style={{ marginRight: "10px" }}>
+          <input type="radio" name="tipo" value="cliente" onChange={e => setTipo(e.target.value)} /> Cliente
+        </label>
+        <label>
+          <input type="radio" name="tipo" value="barbeiro" onChange={e => setTipo(e.target.value)} /> Barbeiro
+        </label>
+      </div>
+
+      <button onClick={handleCadastro} style={buttonStyle}>Cadastrar</button>
+    </div>
+  );
 }
 
-const { error } = await supabase
-.from("users")
-.insert([
-{
-name:name,
-email:email,
-phone:phone,
-password:password,
-account_type:accountType
-}
-]);
-
-if(error){
-
-alert("Erro ao criar conta");
-
-return;
-
-}
-
-if(accountType === "barber"){
-
-navigator.geolocation.getCurrentPosition(async (pos)=>{
-
-const lat = pos.coords.latitude;
-const lng = pos.coords.longitude;
-
-await supabase
-.from("barbers")
-.insert([
-{
-name:name,
-email:email,
-phone:phone,
-lat:lat,
-lng:lng,
-rating:5
-}
-]);
-
-window.location.href="/mapa";
-
-});
-
-}else{
-
-window.location.href="/mapa";
-
-}
-
-};
-
-return(
-
-<div style={{
-minHeight:"100vh",
-background:"#111",
-color:"white",
-display:"flex",
-flexDirection:"column",
-justifyContent:"center",
-alignItems:"center",
-gap:"15px"
-}}>
-
-<h1>Cadastro BarberGo</h1>
-
-<input
-placeholder="Nome"
-value={name}
-onChange={(e)=>setName(e.target.value)}
-style={{padding:"10px",width:"260px"}}
-/>
-
-<input
-placeholder="Email"
-value={email}
-onChange={(e)=>setEmail(e.target.value)}
-style={{padding:"10px",width:"260px"}}
-/>
-
-<input
-placeholder="Telefone"
-value={phone}
-onChange={(e)=>setPhone(e.target.value)}
-style={{padding:"10px",width:"260px"}}
-/>
-
-<input
-placeholder="Senha"
-type="password"
-value={password}
-onChange={(e)=>setPassword(e.target.value)}
-style={{padding:"10px",width:"260px"}}
-/>
-
-<select
-value={accountType}
-onChange={(e)=>setAccountType(e.target.value)}
-style={{padding:"10px",width:"260px"}}
->
-
-<option value="client">Cliente</option>
-<option value="barber">Barbeiro</option>
-
-</select>
-
-<button
-onClick={cadastrar}
-style={{
-padding:"15px",
-width:"260px",
-background:"#f2b705",
-border:"none",
-borderRadius:"10px",
-fontSize:"16px"
-}}
->
-
-Criar Conta
-
-</button>
-
-</div>
-
-);
-
-}
+const inputStyle = { marginBottom: "10px", padding: "10px", width: "250px", borderRadius: "8px", border: "2px solid #ffd700" };
+const buttonStyle = { padding: "10px 30px", backgroundColor: "#ffd700", color: "#000", border: "none", borderRadius: "10px", fontWeight: "bold", cursor: "pointer" };
