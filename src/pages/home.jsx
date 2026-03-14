@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../services/supabase";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Home() {
 
@@ -46,6 +47,12 @@ onChange={(e)=>setPassword(e.target.value)}
 />
 
 <button onClick={login}>ENTRAR</button>
+
+<Link to="/cadastrobarbeiro">
+<p style={{marginTop:"20px",color:"#fff"}}>
+Criar conta
+</p>
+</Link>
 
 </div>
 
