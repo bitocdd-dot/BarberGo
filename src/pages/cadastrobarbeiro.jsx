@@ -1,61 +1,75 @@
 import { useState } from "react";
 import { supabase } from "../services/supabase";
+import { useNavigate } from "react-router-dom";
 
-export default function CadastroBarbeiro() {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+export default function CadastroBarbeiro(){
 
-  async function cadastrar(e) {
-    e.preventDefault();
+const navigate = useNavigate();
 
-    const { error } = await supabase.from("barbers").insert([
-      { name, phone, lat, lng, rating: 5 }
-    ]);
+const [name,setName] = useState("");
+const [phone,setPhone] = useState("");
+const [rating,setRating] = useState("5");
 
-    if (error) {
-      alert("Erro ao cadastrar");
-    } else {
-      alert("Barbeiro cadastrado!");
-    }
-  }
+const cadastrar = () => {
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>Cadastro de Barbeiro</h2>
+navigator.geolocation.getCurrentPosition(async (pos)=>{
 
-      <form onSubmit={cadastrar}>
-        <input
-          placeholder="Nome"
-          onChange={(e) => setName(e.target.value)}
-        />
+const lat = pos.coords.latitude;
+const lng = pos.coords.longitude;
 
-        <br /><br />
+const { error } = await supabase
+.from("barbers")
+.insert([
+{
+name: name,
+phone: phone,
+rating: rating,
+lat: lat,
+lng: lng
+}
+]);
 
-        <input
-          placeholder="Telefone"
-          onChange={(e) => setPhone(e.target.value)}
-        />
+if(error){
+alert("Erro ao cadastrar barbeiro");
+}else{
+alert("Barbeiro cadastrado com sucesso");
+navigate("/mapa");
+}
 
-        <br /><br />
+});
 
-        <input
-          placeholder="Latitude"
-          onChange={(e) => setLat(e.target.value)}
-        />
+};
 
-        <br /><br />
+return(
 
-        <input
-          placeholder="Longitude"
-          onChange={(e) => setLng(e.target.value)}
-        />
+<div style={{padding:"30px"}}>
 
-        <br /><br />
+<h1>Cadastrar Barbeiro</h1>
 
-        <button type="submit">Cadastrar</button>
-      </form>
-    </div>
-  );
+<input
+placeholder="Nome"
+value={name}
+onChange={(e)=>setName(e.target.value)}
+/>
+
+<input
+placeholder="Telefone"
+value={phone}
+onChange={(e)=>setPhone(e.target.value)}
+/>
+
+<input
+placeholder="Avaliação (1 a 5)"
+value={rating}
+onChange={(e)=>setRating(e.target.value)}
+/>
+
+<button onClick={cadastrar}>
+Cadastrar usando minha localização
+</button>
+
+</div>
+
+);
+
 }
