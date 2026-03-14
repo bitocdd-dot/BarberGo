@@ -1,52 +1,93 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { supabase } from "../services/supabase";
-import "./mapa.css";
+import "leaflet/dist/leaflet.css";
 
-const barberIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/3081/3081682.png",
-  iconSize: [40, 40]
+export default function Mapa(){
+
+const [barbers,setBarbers] = useState([]);
+const [userLocation,setUserLocation] = useState(null);
+
+useEffect(()=>{
+
+navigator.geolocation.getCurrentPosition((pos)=>{
+
+setUserLocation([
+pos.coords.latitude,
+pos.coords.longitude
+]);
+
 });
 
-export default function Mapa() {
-  const [barbers, setBarbers] = useState([]);
+loadBarbers();
 
-  useEffect(() => {
-    async function carregar() {
-      const { data } = await supabase.from("barbers").select("*");
-      setBarbers(data);
-    }
+},[]);
 
-    carregar();
-  }, []);
+const loadBarbers = async ()=>{
 
-  return (
-    <div className="map-container">
-      <MapContainer
-        center={[-22.9068, -43.1729]}
-        zoom={13}
-        className="mapa"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+const { data } = await supabase
+.from("barbers")
+.select("*");
 
-        {barbers.map((b) => (
-          <Marker
-            key={b.id}
-            position={[Number(b.lat), Number(b.lng)]}
-            icon={barberIcon}
-          >
-            <Popup>
-              <strong>{b.name}</strong>
-              <br />
-              📞 {b.phone}
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </div>
-  );
+if(data){
+setBarbers(data);
+}
+
+};
+
+return(
+
+<div className="map-container">
+
+<MapContainer
+center={userLocation || [-22.9068,-43.1729]}
+zoom={13}
+style={{height:"100%",width:"100%"}}
+>
+
+<TileLayer
+url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+/>
+
+{barbers.map((b)=>(
+
+<Marker
+key={b.id}
+position={[b.lat,b.lng]}
+>
+
+<Popup>
+
+<b>{b.name}</b>
+
+<br/>
+
+⭐ {b.rating}
+
+<br/>
+
+<button>Ver Perfil</button>
+
+</Popup>
+
+</Marker>
+
+))}
+
+</MapContainer>
+
+<div className="bottom-bar">
+
+<a href="/">Início</a>
+<a href="/mapa">Mapa</a>
+<a href="#">Agenda</a>
+<a href="#">Perfil</a>
+<a href="#">Suporte</a>
+
+</div>
+
+</div>
+
+);
+
 }
