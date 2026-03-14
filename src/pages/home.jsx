@@ -1,20 +1,25 @@
+import { Link } from "react-router-dom";
+
 export default function Home() {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>BarberGo</h1>
+    <div style={{ padding: 40, textAlign: "center" }}>
+      <h1>💈 BarberGo</h1>
 
-      <p>Bem-vindo! Escolha uma opção:</p>
+      <p>Encontre barbeiros próximos de você</p>
 
-      <a href="/cadastrobarbeiro">
-        <button>Cadastrar Barbeiro</button>
-      </a>
+      <div style={{ marginTop: 30 }}>
+        <Link to="/cadastrobarbeiro">
+          <button style={{ padding: 15, margin: 10 }}>
+            Cadastrar Barbeiro
+          </button>
+        </Link>
 
-      <br />
-      <br />
-
-      <a href="/mapa">
-        <button>Ver Mapa</button>
-      </a>
+        <Link to="/mapa">
+          <button style={{ padding: 15, margin: 10 }}>
+            Ver Mapa
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
