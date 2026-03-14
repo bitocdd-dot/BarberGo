@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { supabase } from "../services/supabase";
 import "leaflet/dist/leaflet.css";
 
@@ -7,6 +7,7 @@ export default function Mapa(){
 
 const [barbers,setBarbers] = useState([]);
 const [userLocation,setUserLocation] = useState(null);
+const [selectedBarber,setSelectedBarber] = useState(null);
 
 useEffect(()=>{
 
@@ -37,7 +38,7 @@ setBarbers(data);
 
 return(
 
-<div className="map-container">
+<div style={{height:"100vh"}}>
 
 <MapContainer
 center={userLocation || [-22.9068,-43.1729]}
@@ -54,21 +55,12 @@ url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 <Marker
 key={b.id}
 position={[b.lat,b.lng]}
+eventHandlers={{
+click: () => {
+setSelectedBarber(b)
+}
+}}
 >
-
-<Popup>
-
-<b>{b.name}</b>
-
-<br/>
-
-⭐ {b.rating}
-
-<br/>
-
-<button>Ver Perfil</button>
-
-</Popup>
 
 </Marker>
 
@@ -76,15 +68,37 @@ position={[b.lat,b.lng]}
 
 </MapContainer>
 
-<div className="bottom-bar">
+{selectedBarber && (
 
-<a href="/">Início</a>
-<a href="/mapa">Mapa</a>
-<a href="#">Agenda</a>
-<a href="#">Perfil</a>
-<a href="#">Suporte</a>
+<div style={{
+position:"fixed",
+bottom:"0",
+width:"100%",
+background:"#111",
+padding:"20px",
+borderTopLeftRadius:"20px",
+borderTopRightRadius:"20px",
+boxShadow:"0 -5px 20px rgba(0,0,0,0.5)"
+}}>
+
+<h2>{selectedBarber.name}</h2>
+
+<p>⭐ {selectedBarber.rating}</p>
+
+<button style={{
+width:"100%",
+padding:"15px",
+background:"#f2b705",
+border:"none",
+borderRadius:"10px",
+fontSize:"16px"
+}}>
+VER PERFIL
+</button>
 
 </div>
+
+)}
 
 </div>
 
