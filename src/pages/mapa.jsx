@@ -78,12 +78,15 @@ background:"#111",
 padding:"20px",
 borderTopLeftRadius:"20px",
 borderTopRightRadius:"20px",
-boxShadow:"0 -5px 20px rgba(0,0,0,0.5)"
+boxShadow:"0 -5px 20px rgba(0,0,0,0.5)",
+color:"white"
 }}>
 
 <h2>{selectedBarber.name}</h2>
 
 <p>⭐ {selectedBarber.rating}</p>
+
+<a href={"/perfilbarbeiro/" + selectedBarber.id}>
 
 <button style={{
 width:"100%",
@@ -95,6 +98,8 @@ fontSize:"16px"
 }}>
 VER PERFIL
 </button>
+
+</a>
 
 </div>
 
