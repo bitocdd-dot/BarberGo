@@ -5,14 +5,45 @@ body {
   color: white;
 }
 
-h1 {
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://images.unsplash.com/photo-1621605815971-fbc98d665033");
+  background-size: cover;
+  background-position: center;
+}
+
+.login-box {
+  background: rgba(0,0,0,0.75);
+  padding: 40px;
+  border-radius: 14px;
+  width: 320px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 40px;
   color: #f2b705;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
 }
 
 button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
   background: #f2b705;
   border: none;
-  padding: 14px 25px;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
@@ -20,4 +51,23 @@ button {
 
 button:hover {
   background: #ffd447;
+}
+
+.map-container {
+  height: 100vh;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #1a1a1a;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+}
+
+.bottom-bar a {
+  color: white;
+  text-decoration: none;
 }
