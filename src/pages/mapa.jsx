@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { supabase } from "../services/supabase";
 
-// Import dinamicamente para evitar erro SSR
 const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then(m => m.TileLayer), { ssr: false });
 const Marker = dynamic(() => import("react-leaflet").then(m => m.Marker), { ssr: false });
@@ -12,34 +11,34 @@ const Popup = dynamic(() => import("react-leaflet").then(m => m.Popup), { ssr: f
 export default function Mapa() {
   const [barbeiros, setBarbeiros] = useState([]);
   const [clientesOnline, setClientesOnline] = useState(0);
-  const [isClient, setIsClient] = useState(false); // Para renderizar só no cliente
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Garantir renderização no cliente
+    setIsClient(true);
     fetchBarbeiros();
     fetchClientes();
   }, []);
 
   const fetchBarbeiros = async () => {
-    const { data, error } = await supabase.from("users").select("*").eq("tipo", "barbeiro");
+    const { data, error } = await supabase.from("barbers").select("*");
     if (!error) setBarbeiros(data || []);
   };
 
   const fetchClientes = async () => {
-    const { data } = await supabase.from("users").select("*").eq("tipo", "cliente");
+    const { data } = await supabase.from("clients").select("*");
     setClientesOnline(data?.length || 0);
   };
 
-  if (!isClient) return null; // Não renderiza no SSR
+  if (!isClient) return null;
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <MapContainer center={[-22.9129, -43.2003]} zoom={13} style={{ height: "90%", width: "100%" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {barbeiros.map(b => (
-          <Marker key={b.id} position={[b.lat || -22.9129, b.lng || -43.2003]}>
+          <Marker key={b.id} position={[b.lat, b.lng]}>
             <Popup>
-              <h3>{b.nome}</h3>
+              <h3>{b.name}</h3>
               <Link href={`/perfilbarbeiro?id=${b.id}`}>
                 <button style={buttonStyle}>Ver Perfil</button>
               </Link>
