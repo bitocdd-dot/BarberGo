@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
 
 export default function PerfilBarbeiro() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams();
   const [barbeiro, setBarbeiro] = useState(null);
   const [servicos, setServicos] = useState([]);
 
@@ -15,20 +14,22 @@ export default function PerfilBarbeiro() {
   }, [id]);
 
   const fetchBarbeiro = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("barbers")
       .select("*")
       .eq("id", id)
       .single();
 
+    if (error) console.log(error);
     setBarbeiro(data);
   };
 
   const fetchServicos = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("services")
       .select("*");
 
+    if (error) console.log(error);
     setServicos(data || []);
   };
 
@@ -42,7 +43,7 @@ export default function PerfilBarbeiro() {
           padding: "20px",
         }}
       >
-        Carregando...
+        Carregando perfil...
       </p>
     );
 
@@ -59,16 +60,16 @@ export default function PerfilBarbeiro() {
         <img
           src={barbeiro.profile_image}
           alt={barbeiro.name}
-          style={{ width: "150px", borderRadius: "50%" }}
+          style={{ width: "150px", borderRadius: "50%", marginBottom: "20px" }}
         />
       )}
 
       <h1>{barbeiro.name}</h1>
-      <p>Email: {barbeiro.email}</p>
-      <p>Telefone: {barbeiro.phone}</p>
-      <p>Nota: {barbeiro.rating || "N/A"}</p>
+      <p><b>Email:</b> {barbeiro.email}</p>
+      <p><b>Telefone:</b> {barbeiro.phone}</p>
+      <p><b>Nota:</b> {barbeiro.rating || "N/A"}</p>
 
-      <h3>Serviços:</h3>
+      <h3 style={{ marginTop: "25px" }}>Serviços oferecidos:</h3>
       <ul>
         {servicos.map((s) => (
           <li key={s.id}>
@@ -81,10 +82,11 @@ export default function PerfilBarbeiro() {
         style={{
           backgroundColor: "#ffd700",
           color: "#000",
-          padding: "10px",
+          padding: "12px",
+          width: "100%",
           border: "none",
           fontWeight: "bold",
-          marginTop: "20px",
+          marginTop: "25px",
           borderRadius: "10px",
           cursor: "pointer",
         }}
