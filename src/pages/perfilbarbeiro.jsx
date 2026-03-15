@@ -1,83 +1,49 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { supabase } from "../services/supabase";
 
-export default function PerfilBarbeiro(){
+export default function PerfilBarbeiro() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [barbeiro, setBarbeiro] = useState(null);
+  const [servicos, setServicos] = useState([]);
 
-const { id } = useParams();
+  useEffect(() => {
+    if (!id) return;
+    fetchBarbeiro();
+    fetchServicos();
+  }, [id]);
 
-const [barber,setBarber] = useState(null);
+  const fetchBarbeiro = async () => {
+    const { data } = await supabase.from("barbers").select("*").eq("id", id).single();
+    setBarbeiro(data);
+  };
 
-useEffect(()=>{
+  const fetchServicos = async () => {
+    const { data } = await supabase.from("services").select("*").eq("barber_id", id);
+    setServicos(data || []);
+  };
 
-loadBarber();
+  if (!barbeiro) return <p style={{ color: "#ffd700", backgroundColor: "#000", minHeight: "100vh", padding: "20px" }}>Carregando...</p>;
 
-},[]);
+  return (
+    <div style={{ padding: "20px", color: "#ffd700", backgroundColor: "#000", minHeight: "100vh" }}>
+      {barbeiro.profile_image && <img src={barbeiro.profile_image} alt={barbeiro.name} style={{ width: "150px", borderRadius: "50%" }} />}
+      <h1>{barbeiro.name}</h1>
+      <p>Email: {barbeiro.email}</p>
+      <p>Telefone: {barbeiro.phone}</p>
+      <p>Nota: {barbeiro.rating || "N/A"}</p>
 
-const loadBarber = async ()=>{
+      <h3>Serviços:</h3>
+      <ul>
+        {servicos.map(s => (
+          <li key={s.id}>{s.name} - R${s.price}</li>
+        ))}
+      </ul>
 
-const { data } = await supabase
-.from("barbers")
-.select("*")
-.eq("id",id)
-.single();
-
-if(data){
-setBarber(data);
-}
-
-};
-
-if(!barber){
-return <p>Carregando...</p>
-}
-
-return(
-
-<div style={{
-padding:"20px",
-background:"#111",
-color:"white",
-minHeight:"100vh",
-textAlign:"center"
-}}>
-
-<img
-src={barber.profile_image || "https://i.imgur.com/8Km9tLL.png"}
-style={{
-width:"120px",
-height:"120px",
-borderRadius:"100%",
-marginBottom:"10px"
-}}
-/>
-
-<h1>{barber.name}</h1>
-
-<p>⭐ Avaliação: {barber.rating}</p>
-
-<p>Telefone: {barber.phone}</p>
-
-<p>Email: {barber.email}</p>
-
-<h3>Portfólio</h3>
-
-<p>Em breve fotos de cortes...</p>
-
-<button style={{
-marginTop:"20px",
-padding:"15px",
-background:"#f2b705",
-border:"none",
-borderRadius:"10px"
-}}>
-
-Chamar Barbeiro
-
-</button>
-
-</div>
-
-);
-
+      <button style={{ backgroundColor: "#ffd700", color: "#000", padding: "10px", border: "none", fontWeight: "bold", marginTop: "20px" }}>
+        Chamar Barbeiro
+      </button>
+    </div>
+  );
 }
