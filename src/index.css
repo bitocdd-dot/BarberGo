@@ -1,0 +1,33 @@
+/* CSS Global do App BarberGo */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f8f8f8;
+  color: #222;
+}
+
+button {
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #222;
+  color: #fff;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #444;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
