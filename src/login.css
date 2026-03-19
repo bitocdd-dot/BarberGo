@@ -1,27 +1,52 @@
-/* CSS específico para a tela de login */
-
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
+.login-box {
+  background-color: rgba(255, 255, 255, 0.85);
   padding: 30px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.login-container h1 {
+  border-radius: 12px;
+  min-width: 320px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
-  margin-bottom: 20px;
 }
 
-.login-container input {
+.login-box h1 {
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #222;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.login-box button {
   width: 100%;
   padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #222;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.login-container button {
-  width: 100%;
+.login-box button:hover {
+  background-color: #444;
+}
+
+.login-box p {
+  margin-top: 15px;
+}
+
+.login-box p a {
+  color: #222;
+  text-decoration: underline;
+  font-weight: bold;
 }
