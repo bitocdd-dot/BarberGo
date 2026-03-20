@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import '../index.css';
 import { supabase } from '../services/supabase';
+import '../index.css';
 
 export default function Mapa() {
   const [barbeiros, setBarbeiros] = useState([]);
@@ -17,7 +17,12 @@ export default function Mapa() {
   }, []);
 
   return (
-    <div className="mapa-container">
+    <div className="mapa-container" style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '20px'
+    }}>
       <h1>Mapa de Barbeiros</h1>
       <MapContainer center={[-22.9, -43.2]} zoom={12} style={{ height: '500px', width: '90%' }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
