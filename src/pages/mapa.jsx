@@ -1,10 +1,11 @@
 import React from 'react';
+import '../index.css';
 
 export default function Mapa() {
   return (
-    <div style={{ textAlign: 'center', padding: '50px' }}>
+    <div className="mapa-container">
       <h1>Mapa de Barbeiros</h1>
-      <p>Aqui vamos mostrar o mapa interativo (Leaflet/Supabase).</p>
+      <p>Mapa interativo será implementado aqui (Leaflet + Supabase).</p>
     </div>
   );
 }
