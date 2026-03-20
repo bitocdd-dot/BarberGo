@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
     console.log('Email:', email);
     console.log('Senha:', senha);
-    navigate('/'); // Aqui depois você conecta com Supabase
+    navigate('/'); // depois conectar com Supabase
   };
 
   return (
