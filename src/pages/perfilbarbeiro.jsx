@@ -1,10 +1,11 @@
 import React from 'react';
+import '../index.css';
 
 export default function PerfilBarbeiro() {
   return (
-    <div style={{ textAlign: 'center', padding: '50px' }}>
+    <div className="perfil-container">
       <h1>Perfil do Barbeiro</h1>
-      <p>Aqui vai aparecer o perfil detalhado do barbeiro.</p>
+      <p>Detalhes do barbeiro aparecerão aqui.</p>
     </div>
   );
 }
