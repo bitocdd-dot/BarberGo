@@ -1,72 +1,36 @@
-/* Container da tela */
-.login-container {
-  font-family: 'Arial', sans-serif;
-}
-
-/* Caixa central do login */
 .login-box {
-  background-color: rgba(0, 0, 0, 0.65); /* fundo semi-transparente escuro */
-  padding: 40px 30px;
-  border-radius: 20px;
-  min-width: 350px;
-  max-width: 450px;
-  width: 100%;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6); /* fundo semitransparente para destacar inputs */
+  padding: 40px;
+  border-radius: 10px;
+  color: white;
   text-align: center;
-  color: #fff;
+  width: 350px;
 }
 
-/* Título */
-.login-box h1 {
-  margin-bottom: 25px;
-  font-size: 36px;
-  letter-spacing: 2px;
-  color: #f9f9f9;
-}
-
-/* Inputs */
 .login-box input {
   width: 100%;
-  padding: 15px 18px;
-  margin: 12px 0;
-  border-radius: 12px;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 5px;
   border: none;
-  font-size: 16px;
 }
 
-/* Botão */
 .login-box button {
   width: 100%;
-  padding: 15px;
-  margin-top: 15px;
+  padding: 12px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #ff8c00, #ff4500);
-  color: #fff;
-  font-size: 18px;
+  border-radius: 5px;
+  background-color: #ff6600;
+  color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 .login-box button:hover {
-  background: linear-gradient(90deg, #ff4500, #ff8c00);
-  transform: scale(1.03);
+  background-color: #e65c00;
 }
 
-/* Link criar conta */
-.login-box p {
-  margin-top: 20px;
-}
-
-.login-box p a {
-  color: #ffd700;
-  font-weight: bold;
+.login-box a {
+  color: #ffcc00;
   text-decoration: none;
-  transition: 0.3s;
-}
-
-.login-box p a:hover {
-  color: #ff4500;
-  text-decoration: underline;
 }
