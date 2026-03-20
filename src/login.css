@@ -1,7 +1,7 @@
 .login-box {
-  background: rgba(0, 0, 0, 0.6); /* fundo semitransparente para destacar inputs */
+  background: rgba(0, 0, 0, 0.6); /* fundo semitransparente */
   padding: 40px;
-  border-radius: 10px;
+  border-radius: 15px;
   color: white;
   text-align: center;
   width: 350px;
@@ -11,15 +11,16 @@
   width: 100%;
   margin: 10px 0;
   padding: 12px;
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
 }
 
 .login-box button {
   width: 100%;
   padding: 12px;
+  margin-top: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   background-color: #ff6600;
   color: white;
   font-weight: bold;
@@ -31,6 +32,9 @@
 }
 
 .login-box a {
+  display: block;
+  margin-top: 15px;
   color: #ffcc00;
   text-decoration: none;
+  font-weight: bold;
 }
