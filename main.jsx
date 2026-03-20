@@ -1,20 +1,15 @@
+// main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/home.jsx';
+import Login from './pages/login.jsx';
+import CadastroBarbeiro from './pages/cadastrobarbeiro.jsx';
+import Mapa from './pages/mapa.jsx';
+import PerfilBarbeiro from './pages/perfilbarbeiro.jsx';
+import './index.css';
 
-import './src/index.css';
-import './src/login.css';
-
-// Importar todas as telas
-import Home from './src/pages/home.jsx';
-import Login from './src/pages/login.jsx';
-import CadastroBarbeiro from './src/pages/cadastrobarbeiro.jsx';
-import Mapa from './src/pages/mapa.jsx';
-import PerfilBarbeiro from './src/pages/perfilbarbeiro.jsx';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
