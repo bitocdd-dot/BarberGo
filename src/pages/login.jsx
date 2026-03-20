@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import loginImage from '../assets/4F0D9D57-C2FE-4F94-B3DB-2123C22AB545.png';
-import '../login.css';
+import '../index.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -8,7 +8,6 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Aqui você vai chamar a função de login do Supabase
     console.log('Login:', email, senha);
   };
 
@@ -29,20 +28,8 @@ export default function Login() {
       <div className="login-box">
         <h1>BarberGo</h1>
         <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
+          <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
           <button type="submit">ENTRAR</button>
         </form>
         <p>
