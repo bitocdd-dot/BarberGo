@@ -1,33 +1,183 @@
-/* CSS Global do App BarberGo */
-
-* {
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
 }
 
-body {
-  background-color: #f8f8f8;
-  color: #222;
+/* ---------------- Login ---------------- */
+.login-container {
+  font-family: 'Arial', sans-serif;
 }
 
-button {
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: #222;
+.login-box {
+  background-color: rgba(0, 0, 0, 0.65);
+  padding: 40px 30px;
+  border-radius: 20px;
+  min-width: 350px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+  text-align: center;
   color: #fff;
-  border-radius: 4px;
+}
+
+.login-box h1 {
+  margin-bottom: 25px;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: #f9f9f9;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 15px 18px;
+  margin: 12px 0;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ff8c00, #ff4500);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
-  background-color: #444;
+.login-box button:hover {
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+  transform: scale(1.03);
 }
 
-a {
+.login-box p {
+  margin-top: 20px;
+}
+
+.login-box p a {
+  color: #ffd700;
+  font-weight: bold;
   text-decoration: none;
-  color: inherit;
+  transition: 0.3s;
+}
+
+.login-box p a:hover {
+  color: #ff4500;
+  text-decoration: underline;
+}
+
+/* ---------------- Home ---------------- */
+.home-container {
+  height: 100vh;
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+}
+
+.home-btn {
+  padding: 15px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #222;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  background: #444;
+  transform: scale(1.05);
+}
+
+/* ---------------- Cadastro ---------------- */
+.cadastro-container {
+  height: 100vh;
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.cadastro-box {
+  background-color: rgba(0,0,0,0.65);
+  padding: 40px 30px;
+  border-radius: 20px;
+  min-width: 350px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  text-align: center;
+  color: #fff;
+}
+
+.cadastro-box h1 {
+  margin-bottom: 25px;
+  font-size: 36px;
+  letter-spacing: 2px;
+}
+
+.cadastro-box input {
+  width: 100%;
+  padding: 15px;
+  margin: 12px 0;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.cadastro-box button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ff8c00, #ff4500);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.cadastro-box button:hover {
+  background: linear-gradient(90deg, #ff4500, #ff8c00);
+  transform: scale(1.03);
+}
+
+/* ---------------- Mapa ---------------- */
+.mapa-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  color: #fff;
+}
+
+/* ---------------- Perfil ---------------- */
+.perfil-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  color: #fff;
 }
