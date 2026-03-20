@@ -12,8 +12,7 @@ export default function CadastroBarbeiro() {
   const handleCadastro = async (e) => {
     e.preventDefault();
     try {
-      const data = await registerUser(email, senha);
-      console.log('Cadastro sucesso:', data);
+      await registerUser(email, senha);
       navigate('/login');
     } catch (err) {
       alert('Erro ao cadastrar: ' + err.message);
@@ -21,8 +20,21 @@ export default function CadastroBarbeiro() {
   };
 
   return (
-    <div className="cadastro-container">
-      <div className="cadastro-box">
+    <div className="cadastro-container" style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#f0f0f0',
+    }}>
+      <div className="cadastro-box" style={{
+        background: 'rgba(0,0,0,0.6)',
+        padding: '40px',
+        borderRadius: '10px',
+        color: 'white',
+        width: '350px',
+        textAlign: 'center'
+      }}>
         <h1>Cadastro Barbeiro</h1>
         <form onSubmit={handleCadastro}>
           <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
