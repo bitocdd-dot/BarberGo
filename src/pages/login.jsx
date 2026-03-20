@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import loginImage from '../assets/4F0D9D57-C2FE-4F94-B3DB-2123C22AB545.png';
-import '../login.css'; // CSS do login
+import '../login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -8,8 +8,8 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Aqui você chama a função de login do Supabase
-    console.log('Email:', email, 'Senha:', senha);
+    // Aqui você vai chamar a função de login do Supabase
+    console.log('Login:', email, senha);
   };
 
   return (
