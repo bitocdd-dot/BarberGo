@@ -1,0 +1,37 @@
+/* login.css criado para evitar erro no build */
+
+.login-container {
+  width: 100%;
+  max-width: 380px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.login-input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  opacity: 0.9;
+}
