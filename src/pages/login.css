@@ -1,37 +1,81 @@
-/* login.css criado para evitar erro no build */
-
-.login-container {
-  width: 100%;
-  max-width: 380px;
-  margin: 40px auto;
-  padding: 20px;
+* {
+  box-sizing: border-box;
 }
 
-.login-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.65)),
+    url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(20, 20, 20, 0.60);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 32px 24px;
   text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
 
-.login-input {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.logo {
+  margin: 0 0 24px;
+  color: #f3c45a;
+  font-size: 42px;
+  font-style: italic;
+  font-weight: 700;
 }
 
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background: #000;
-  color: #fff;
-  border-radius: 8px;
-  font-weight: bold;
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-form input {
+  height: 52px;
+  border: none;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 16px;
+}
+
+.login-form button {
+  height: 52px;
+  border: none;
+  border-radius: 12px;
+  background: #f5c242;
+  color: #1b1b1b;
+  font-size: 18px;
+  font-weight: 800;
   cursor: pointer;
 }
 
-.login-button:hover {
-  opacity: 0.9;
+.link-cadastro {
+  display: inline-block;
+  margin-top: 18px;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.erro {
+  margin-top: 14px;
+  color: #ff8a8a;
+  font-size: 14px;
 }
