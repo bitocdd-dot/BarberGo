@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/login";
-import Home from "./pages/home";
+import Mapa from "./pages/mapa";
+import ListaBarbeiros from "./pages/listaBarbeiros/listaBarbeiros";
+import PerfilBarbeiro from "./pages/perfilBarbeiro/perfilBarbeiro";
 
 export default function App() {
-  const [logado, setLogado] = useState(false);
-
   return (
-    <>
-      {logado ? <Home /> : <Login onLogin={() => setLogado(true)} />}
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* Tela inicial */}
+        <Route path="/" element={<Login />} />
+
+        {/* Mapa */}
+        <Route path="/mapa" element={<Mapa />} />
+
+        {/* Lista de barbeiros */}
+        <Route path="/listaBarbeiros" element={<ListaBarbeiros />} />
+
+        {/* Perfil do barbeiro */}
+        <Route path="/perfilBarbeiro" element={<PerfilBarbeiro />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
