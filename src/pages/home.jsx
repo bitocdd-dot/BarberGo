@@ -1,80 +1,70 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../services/supabase";
 import "./home.css";
-import L from "leaflet";
+
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { getCurrentLocation } from "../services/location";
+
+import L from "leaflet";
+import BarberCard from "../components/barberCard";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const [mapa, setMapa] = useState(null);
-  const [posicao, setPosicao] = useState(null);
+  const [barbers, setBarbers] = useState([]);
+  const navigate = useNavigate();
 
-  // Ícone azul para o usuário
-  const userIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/4870/4870320.png",
-    iconSize: [45, 45],
+  // Ícone do barbeiro no mapa
+  const barberIcon = new L.Icon({
+    iconUrl:
+      "https://cdn-icons-png.flaticon.com/512/1048/1048949.png",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
   });
-
-  // Ícone dos barbeiros
-  const barberIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/2921/2921822.png",
-    iconSize: [45, 45],
-  });
-
-  // Barbeiros fake (até conectarmos no Supabase)
-  const barbeirosFakes = [
-    { id: 1, nome: "João Barber", lat: -22.90, lng: -43.18 },
-    { id: 2, nome: "Carlos Fade", lat: -22.89, lng: -43.17 },
-    { id: 3, nome: "Marcos Style", lat: -22.91, lng: -43.19 },
-  ];
 
   useEffect(() => {
-    getCurrentLocation()
-      .then((local) => {
-        setPosicao(local);
-
-        const mapaLeaflet = L.map("mapa", {
-          center: [local.lat, local.lng],
-          zoom: 15,
-        });
-
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-        }).addTo(mapaLeaflet);
-
-        setMapa(mapaLeaflet);
-
-        // marcador do usuário
-        L.marker([local.lat, local.lng], { icon: userIcon }).addTo(mapaLeaflet);
-      })
-      .catch((err) => console.log("Erro ao obter localização:", err));
+    carregarBarbeiros();
   }, []);
 
-  useEffect(() => {
-    if (mapa && posicao) {
-      barbeirosFakes.forEach((b) => {
-        const marker = L.marker([b.lat, b.lng], { icon: barberIcon }).addTo(
-          mapa
-        );
-        marker.bindPopup(`<b>${b.nome}</b><br/>⭐ 4.8`);
-      });
+  async function carregarBarbeiros() {
+    const { data, error } = await supabase.from("barbers").select("*");
+
+    if (error) {
+      console.log("Erro ao carregar barbeiros:", error);
+      return;
     }
-  }, [mapa, posicao]);
+
+    // Filtra barbeiros que têm coordenadas
+    const filtrados = data.filter((b) => b.lat && b.lng);
+    setBarbers(filtrados);
+  }
 
   return (
-    <div className="home-container">
-      <header className="top-bar">
-        <h2>BarberGo</h2>
-        <span className="status">🔥 8 clientes agora</span>
-      </header>
+    <div className="map-container">
+      <MapContainer
+        center={[-22.875113, -43.561108]} // Centro inicial
+        zoom={13}
+        style={{ width: "100%", height: "100vh" }}
+      >
+        <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      <div id="mapa"></div>
-
-      <footer className="menu">
-        <button>Início</button>
-        <button>Agenda</button>
-        <button>Ganhos</button>
-        <button>Menu</button>
-      </footer>
+        {barbers.map((barber) => (
+          <Marker
+            key={barber.id}
+            position={[barber.lat, barber.lng]}
+            icon={barberIcon}
+          >
+            <Popup closeButton={false}>
+              <BarberCard
+                id={barber.id}
+                name={barber.name}
+                profile_image={barber.profile_image}
+                rating={barber.rating}
+                onClick={() => navigate(`/perfilBarbeiro?id=${barber.id}`)}
+              />
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
     </div>
   );
 }
