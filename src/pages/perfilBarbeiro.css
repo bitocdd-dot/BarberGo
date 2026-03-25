@@ -1,1 +1,46 @@
+.perfil-container {
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
 
+.perfil-foto {
+  width: 140px;
+  height: 140px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  object-fit: cover;
+  border: 2px solid #555;
+}
+
+.avaliacao {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.portfolio-box {
+  background: #222;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  margin: 10px 0 20px;
+}
+
+.btn-agendar,
+.btn-domicilio {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  background: #e47500;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-domicilio {
+  background: #0066ff;
+}
