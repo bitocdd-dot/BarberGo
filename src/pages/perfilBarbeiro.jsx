@@ -1,21 +1,18 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../../services/supabase";
+import React, { useEffect, useState } from "react";
 import "./perfilBarbeiro.css";
-import { useSearchParams } from "react-router-dom";
+import { supabase } from "../services/supabase";
 
-export default function PerfilBarbeiro() {
-  const [params] = useSearchParams();
-  const barberId = params.get("id");
-
+const PerfilBarbeiro = ({ barberId, onBack }) => {
   const [barber, setBarber] = useState(null);
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    carregarBarbeiro();
-    carregarServicos();
+    fetchBarberData();
+    fetchBarberServices();
   }, []);
 
-  async function carregarBarbeiro() {
+  // Buscar dados do barbeiro
+  async function fetchBarberData() {
     const { data, error } = await supabase
       .from("barbers")
       .select("*")
@@ -23,68 +20,72 @@ export default function PerfilBarbeiro() {
       .single();
 
     if (error) {
-      console.error("Erro ao carregar barbeiro:", error);
+      console.log("Erro ao buscar barbeiro:", error);
       return;
     }
 
     setBarber(data);
   }
 
-  async function carregarServicos() {
-    const { data, error } = await supabase.from("services").select("*");
+  // Buscar serviços
+  async function fetchBarberServices() {
+    const { data, error } = await supabase
+      .from("services")
+      .select("*");
 
     if (error) {
-      console.error("Erro ao carregar serviços:", error);
+      console.log("Erro ao buscar serviços:", error);
       return;
     }
 
     setServices(data);
   }
 
-  if (!barber) {
-    return <div className="carregando">Carregando perfil...</div>;
-  }
+  if (!barber) return <div className="perfil-container">Carregando...</div>;
 
   return (
     <div className="perfil-container">
-      <img
-        src={
-          barber.profile_image && barber.profile_image !== "EMPTY"
-            ? barber.profile_image
-            : "/placeholder.jpg"
-        }
-        alt="Foto do barbeiro"
-        className="perfil-foto"
-      />
+      <button className="back-btn" onClick={onBack}>← Voltar</button>
 
-      <h2 className="perfil-nome">{barber.name}</h2>
-      <p className="perfil-rating">⭐ {barber.rating || 5}</p>
+      <div className="perfil-header">
+        <img
+          src={
+            barber.profile_image && barber.profile_image !== "EMPTY"
+              ? barber.profile_image
+              : "/src/assets/4F0D9D57-C2FE-4F94-B3DB-2123C22AB545.png"
+          }
+          alt="Foto do barbeiro"
+          className="perfil-foto"
+        />
 
-      <p className="perfil-email">{barber.email}</p>
-      <p className="perfil-phone">{barber.phone}</p>
-
-      <div className="secao">
-        <h3>Descrição</h3>
-        <p className="descricao">
-          {barber.description || "Este barbeiro ainda não adicionou uma descrição."}
-        </p>
+        <h2>{barber.name}</h2>
+        <p className="rating">⭐ {barber.rating || 5}</p>
       </div>
 
-      <div className="secao">
-        <h3>Serviços</h3>
-
-        {services.map((service) => (
-          <div key={service.id} className="service-card">
-            <p className="service-name">{service.name}</p>
-            <p className="service-price">R$ {service.price}</p>
-          </div>
-        ))}
+      <div className="perfil-section">
+        <h3>Especialidades</h3>
+        <ul>
+          {services.map((svc) => (
+            <li key={svc.id}>
+              {svc.name} — R${svc.price}
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div className="botoes-acoes">
-        <button className="btn-agendar">Agendar</button>
-        <button className="btn-domicilio">Atendimento Domiciliar</button>
+      <div className="perfil-section">
+        <h3>Portfólio</h3>
+        <div className="portfolio-box">
+          <p>O barbeiro ainda não adicionou fotos.</p>
+        </div>
+      </div>
+
+      <div className="perfil-btns">
+        <button className="btn agendar-btn">Agendar Horário</button>
+        <button className="btn domicilio-btn">Atendimento a Domicílio</button>
       </div>
     </div>
   );
-}
+};
+
+export default PerfilBarbeiro;
