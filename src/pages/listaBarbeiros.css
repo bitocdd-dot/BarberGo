@@ -1,1 +1,49 @@
+.lista-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
 
+.titulo-lista {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.card-barbeiro {
+  display: flex;
+  align-items: center;
+  background: #222;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+}
+
+.foto-barbeiro {
+  width: 85px;
+  height: 85px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.info-barbeiro h3 {
+  margin: 0;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.btn-ver {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #e47500;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-ver:hover {
+  background: #c86400;
+}
