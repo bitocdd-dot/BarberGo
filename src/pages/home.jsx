@@ -1,70 +1,69 @@
 import { useEffect, useState } from "react";
+import { getCurrentLocation } from "../services/location";
 import { supabase } from "../services/supabase";
 import "./home.css";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-
-import L from "leaflet";
-import BarberCard from "../components/barberCard";
-import { useNavigate } from "react-router-dom";
-
 export default function Home() {
+  const [userLocation, setUserLocation] = useState(null);
   const [barbers, setBarbers] = useState([]);
-  const navigate = useNavigate();
+  const [selectedBarber, setSelectedBarber] = useState(null);
 
-  // Ícone do barbeiro no mapa
-  const barberIcon = new L.Icon({
-    iconUrl:
-      "https://cdn-icons-png.flaticon.com/512/1048/1048949.png",
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
-
+  // Pegar localização do usuário
   useEffect(() => {
-    carregarBarbeiros();
+    getCurrentLocation().then((loc) => setUserLocation(loc));
   }, []);
 
-  async function carregarBarbeiros() {
-    const { data, error } = await supabase.from("barbers").select("*");
+  // Buscar barbeiros no Supabase
+  useEffect(() => {
+    const fetchBarbers = async () => {
+      const { data, error } = await supabase.from("barbers").select("*");
 
-    if (error) {
-      console.log("Erro ao carregar barbeiros:", error);
-      return;
-    }
+      if (!error) {
+        setBarbers(data);
+      }
+    };
 
-    // Filtra barbeiros que têm coordenadas
-    const filtrados = data.filter((b) => b.lat && b.lng);
-    setBarbers(filtrados);
-  }
+    fetchBarbers();
+  }, []);
 
   return (
     <div className="map-container">
-      <MapContainer
-        center={[-22.875113, -43.561108]} // Centro inicial
-        zoom={13}
-        style={{ width: "100%", height: "100vh" }}
-      >
-        <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      {/* Mapa */}
+      {userLocation && (
+        <iframe
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyDxx123EXEMPLO
+            &center=${userLocation.lat},${userLocation.lng}
+            &zoom=15`}>
+        </iframe>
+      )}
 
-        {barbers.map((barber) => (
-          <Marker
-            key={barber.id}
-            position={[barber.lat, barber.lng]}
-            icon={barberIcon}
+      {/* Card do barbeiro ao clicar */}
+      {selectedBarber && (
+        <div className="barber-card-popup">
+          <img src={selectedBarber.photo_url} alt="foto" />
+          <h2>{selectedBarber.name}</h2>
+          <p>⭐ {selectedBarber.rating}</p>
+          <p>{selectedBarber.specialties}</p>
+
+          <button
+            className="btn-ver-perfil"
+            onClick={() => {
+              window.location.href = `/perfilBarbeiro?id=${selectedBarber.id}`;
+            }}
           >
-            <Popup closeButton={false}>
-              <BarberCard
-                id={barber.id}
-                name={barber.name}
-                profile_image={barber.profile_image}
-                rating={barber.rating}
-                onClick={() => navigate(`/perfilBarbeiro?id=${barber.id}`)}
-              />
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+            Ver Perfil
+          </button>
+
+          <button className="btn-fechar" onClick={() => setSelectedBarber(null)}>
+            Fechar
+          </button>
+        </div>
+      )}
     </div>
   );
 }
