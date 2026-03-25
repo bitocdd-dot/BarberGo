@@ -1,42 +1,34 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { supabase } from '../services/supabase'
-import './login.css'
+import React, { useState } from "react";
+import "./login.css";
+import { supabase } from "../services/supabase";
 
-export default function Login() {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [erro, setErro] = useState('')
+export default function Login({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
 
-  async function handleLogin(e) {
-    e.preventDefault()
-    setErro('')
-    setLoading(true)
+  const entrar = async (e) => {
+    e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password: senha,
-    })
-
-    setLoading(false)
+      password: senha
+    });
 
     if (error) {
-      setErro(error.message)
-      return
+      setErro("E-mail ou senha incorretos");
+      return;
     }
 
-    navigate('/home')
-  }
+    onLogin();
+  };
 
   return (
-    <div className="login-page">
-      <div className="overlay" />
-      <div className="login-box">
+    <div className="login-container">
+      <div className="overlay">
         <h1 className="logo">BarberGo</h1>
 
-        <form onSubmit={handleLogin} className="login-form">
+        <form className="form" onSubmit={entrar}>
           <input
             type="email"
             placeholder="E-mail"
@@ -53,17 +45,13 @@ export default function Login() {
             required
           />
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Entrando...' : 'ENTRAR'}
-          </button>
+          {erro && <p className="erro">{erro}</p>}
+
+          <button type="submit">ENTRAR</button>
         </form>
 
-        {erro && <p className="erro">{erro}</p>}
-
-        <Link to="/cadastro" className="link-cadastro">
-          Criar conta
-        </Link>
+        <p className="criar">Criar conta</p>
       </div>
     </div>
-  )
+  );
 }
