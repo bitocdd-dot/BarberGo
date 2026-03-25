@@ -1,46 +1,96 @@
 .perfil-container {
   padding: 20px;
-  text-align: center;
-  color: #fff;
-  font-family: Arial, sans-serif;
+  background: #111;
+  min-height: 100vh;
+  color: white;
 }
 
 .perfil-foto {
-  width: 140px;
-  height: 140px;
-  border-radius: 20px;
-  margin-bottom: 15px;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
   object-fit: cover;
-  border: 2px solid #555;
+  display: block;
+  margin: 0 auto;
+  background: #333;
 }
 
-.avaliacao {
-  font-size: 18px;
+.perfil-nome {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 22px;
+}
+
+.perfil-rating {
+  text-align: center;
+  color: #ffd700;
   margin-bottom: 10px;
 }
 
-.portfolio-box {
-  background: #222;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #444;
-  margin: 10px 0 20px;
+.perfil-email,
+.perfil-phone {
+  text-align: center;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.secao {
+  margin-top: 25px;
+}
+
+.secao h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.descricao {
+  background: #1c1c1c;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  font-size: 14px;
+}
+
+.service-card {
+  display: flex;
+  justify-content: space-between;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.service-name {
+  font-size: 16px;
+}
+
+.service-price {
+  font-size: 16px;
+  color: #ffb300;
+}
+
+.botoes-acoes {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .btn-agendar,
 .btn-domicilio {
-  display: block;
-  width: 100%;
+  flex: 1;
   padding: 12px;
-  margin: 8px 0;
+  background: #ffb300;
+  color: #111;
   border: none;
   border-radius: 10px;
-  background: #e47500;
-  color: white;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.btn-domicilio {
-  background: #0066ff;
+.btn-agendar:hover,
+.btn-domicilio:hover {
+  background: #ff9900;
 }
