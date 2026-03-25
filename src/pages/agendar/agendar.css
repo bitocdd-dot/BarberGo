@@ -1,1 +1,75 @@
+.agendar-container {
+  padding: 20px;
+  background: #111;
+  min-height: 100vh;
+  color: white;
+}
 
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service-box {
+  background: #1c1c1c;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+.service-box.selected {
+  border: 1px solid #ffb300;
+}
+
+.data-input {
+  width: 100%;
+  padding: 10px;
+  background: #222;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.hours-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hour-btn {
+  padding: 10px 14px;
+  background: #222;
+  border: 1px solid #333;
+  color: white;
+  border-radius: 8px;
+}
+
+.hour-btn.selected {
+  border: 1px solid #ffb300;
+  background: #ffb300;
+  color: #111;
+}
+
+.btn-confirmar {
+  width: 100%;
+  padding: 14px;
+  margin-top: 30px;
+  background: #ffb300;
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
