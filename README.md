@@ -1,2 +1,0 @@
-# BarberGo
-Projeto BarberGo
