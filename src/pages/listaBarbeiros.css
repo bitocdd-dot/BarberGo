@@ -1,49 +1,62 @@
 .lista-container {
   padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #fff;
+  background: #111;
+  min-height: 100vh;
+  color: white;
 }
 
 .titulo-lista {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.barber-card {
+  display: flex;
+  background: #1c1c1c;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #333;
+}
+
+.barber-foto {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #333;
+}
+
+.barber-info h3 {
+  margin: 0;
+  font-size: 18px;
   color: #fff;
 }
 
-.card-barbeiro {
-  display: flex;
-  align-items: center;
-  background: #222;
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #444;
+.rating {
+  color: #ffd700;
+  font-size: 14px;
 }
 
-.foto-barbeiro {
-  width: 85px;
-  height: 85px;
-  border-radius: 12px;
-  object-fit: cover;
-  margin-right: 15px;
+.email {
+  font-size: 12px;
+  color: #bbb;
+  margin-bottom: 8px;
 }
 
-.info-barbeiro h3 {
-  margin: 0;
-  margin-bottom: 6px;
+.btn-ver-perfil {
+  background: #ffb300;
+  color: #111;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
   font-weight: bold;
 }
 
-.btn-ver {
-  margin-top: 10px;
-  padding: 8px 15px;
-  background: #e47500;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.btn-ver:hover {
-  background: #c86400;
+.btn-ver-perfil:hover {
+  background: #ff9900;
 }
