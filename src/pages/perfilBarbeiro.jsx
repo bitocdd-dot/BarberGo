@@ -1,91 +1,58 @@
 import React, { useEffect, useState } from "react";
-import "./perfilBarbeiro.css";
 import { supabase } from "../services/supabase";
+import "./perfilBarbeiro.css";
+import { useParams, useNavigate } from "react-router-dom";
 
-const PerfilBarbeiro = ({ barberId, onBack }) => {
+export default function PerfilBarbeiro() {
+  const { barberId } = useParams();
+  const navigate = useNavigate();
+
   const [barber, setBarber] = useState(null);
-  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    fetchBarberData();
-    fetchBarberServices();
+    loadBarber();
   }, []);
 
-  // Buscar dados do barbeiro
-  async function fetchBarberData() {
+  const loadBarber = async () => {
     const { data, error } = await supabase
       .from("barbers")
       .select("*")
       .eq("id", barberId)
       .single();
 
-    if (error) {
-      console.log("Erro ao buscar barbeiro:", error);
-      return;
-    }
-
-    setBarber(data);
-  }
-
-  // Buscar serviços
-  async function fetchBarberServices() {
-    const { data, error } = await supabase
-      .from("services")
-      .select("*");
-
-    if (error) {
-      console.log("Erro ao buscar serviços:", error);
-      return;
-    }
-
-    setServices(data);
-  }
-
-  if (!barber) return <div className="perfil-container">Carregando...</div>;
+    if (!error) setBarber(data);
+  };
 
   return (
-    <div className="perfil-container">
-      <button className="back-btn" onClick={onBack}>← Voltar</button>
+    <div className="perfil-page">
+      {barber && (
+        <div className="perfil-container">
+          <img
+            src={barber.profile_image || "https://via.placeholder.com/150"}
+            className="perfil-img"
+            alt="Barbeiro"
+          />
 
-      <div className="perfil-header">
-        <img
-          src={
-            barber.profile_image && barber.profile_image !== "EMPTY"
-              ? barber.profile_image
-              : "/src/assets/4F0D9D57-C2FE-4F94-B3DB-2123C22AB545.png"
-          }
-          alt="Foto do barbeiro"
-          className="perfil-foto"
-        />
+          <h2>{barber.name}</h2>
+          <p className="perfil-rating">⭐ {barber.rating || "Sem avaliação"}</p>
 
-        <h2>{barber.name}</h2>
-        <p className="rating">⭐ {barber.rating || 5}</p>
-      </div>
+          <h3 className="perfil-section-title">Especialidades</h3>
+          <p className="perfil-text">Corte masculino, degradê, barba, navalhado</p>
 
-      <div className="perfil-section">
-        <h3>Especialidades</h3>
-        <ul>
-          {services.map((svc) => (
-            <li key={svc.id}>
-              {svc.name} — R${svc.price}
-            </li>
-          ))}
-        </ul>
-      </div>
+          <h3 className="perfil-section-title">Sobre</h3>
+          <p className="perfil-text">
+            Profissional com experiência, atendimento domiciliar e na barbearia.
+          </p>
 
-      <div className="perfil-section">
-        <h3>Portfólio</h3>
-        <div className="portfolio-box">
-          <p>O barbeiro ainda não adicionou fotos.</p>
+          {/* BOTÃO AGENDAR */}
+          <button
+            className="perfil-btn"
+            onClick={() => navigate(`/servicos/${barberId}`)}
+          >
+            Agendar Serviço
+          </button>
         </div>
-      </div>
-
-      <div className="perfil-btns">
-        <button className="btn agendar-btn">Agendar Horário</button>
-        <button className="btn domicilio-btn">Atendimento a Domicílio</button>
-      </div>
+      )}
     </div>
   );
-};
-
-export default PerfilBarbeiro;
+}
